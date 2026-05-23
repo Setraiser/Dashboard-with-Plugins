@@ -1,0 +1,50 @@
+/*
+ * Корневой контейнер приложения-хоста (только хост).
+ * Токены — префикс --dashboard-host-*.
+ */
+
+.hostRoot {
+  --dashboard-host-color-bg: #ffffff;
+  --dashboard-host-color-fg: #171717;
+
+  --dashboard-host-font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --dashboard-host-font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --dashboard-host-tab-border: #d1d5db;
+  --dashboard-host-tab-bg: #ffffff;
+  --dashboard-host-tab-text: #111827;
+  --dashboard-host-tab-active-border: #2563eb;
+  --dashboard-host-tab-active-bg: #eff6ff;
+  --dashboard-host-tab-active-text: #1d4ed8;
+
+  --dashboard-host-page-main-gap: 16px;
+
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  color: var(--dashboard-host-color-fg);
+  background: var(--dashboard-host-color-bg);
+  font-family: var(--dashboard-host-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .hostRoot {
+    --dashboard-host-color-bg: #0a0a0a;
+    --dashboard-host-color-fg: #ededed;
+
+    --dashboard-host-tab-border: #374151;
+    --dashboard-host-tab-bg: #111827;
+    --dashboard-host-tab-text: #f3f4f6;
+    --dashboard-host-tab-active-border: #3b82f6;
+    --dashboard-host-tab-active-bg: #1e3a8a33;
+    --dashboard-host-tab-active-text: #93c5fd;
+  }
+}

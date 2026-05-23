@@ -1,0 +1,56 @@
+/* Только токены плагина clock — префикс --clock-widget-*. Не использовать --dashboard-host-*. */
+
+.root {
+  --clock-widget-color-text: #111827;
+  --clock-widget-color-muted: #4b5563;
+  --clock-widget-color-border: #e5e7eb;
+  --clock-widget-color-surface: #f9fafb;
+  --clock-widget-color-button-bg: #ffffff;
+  --clock-widget-color-button-border: #d1d5db;
+  --clock-widget-radius: 8px;
+
+  color: var(--clock-widget-color-text);
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 12px;
+  border-radius: var(--clock-widget-radius);
+  border: 1px solid var(--clock-widget-color-border);
+  background: var(--clock-widget-color-surface);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.time {
+  margin: 0 0 12px;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--clock-widget-color-muted);
+}
+
+.toggle {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--clock-widget-color-button-border);
+  background: var(--clock-widget-color-button-bg);
+  color: var(--clock-widget-color-text);
+  font: inherit;
+}
+
+.toggle:hover {
+  filter: brightness(0.97);
+}
+
+@media (prefers-color-scheme: dark) {
+  .root {
+    --clock-widget-color-text: #f9fafb;
+    --clock-widget-color-muted: #9ca3af;
+    --clock-widget-color-border: #374151;
+    --clock-widget-color-surface: #111827;
+    --clock-widget-color-button-bg: #1f2937;
+    --clock-widget-color-button-border: #4b5563;
+  }
+}

@@ -1,0 +1,24 @@
+.list {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.link {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--dashboard-host-tab-border);
+  background: var(--dashboard-host-tab-bg);
+  color: var(--dashboard-host-tab-text);
+  text-decoration: none;
+}
+
+.linkActive {
+  border-color: var(--dashboard-host-tab-active-border);
+  background: var(--dashboard-host-tab-active-bg);
+  color: var(--dashboard-host-tab-active-text);
+}
