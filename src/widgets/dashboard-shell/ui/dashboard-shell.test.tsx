@@ -1,9 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { DashboardShell } from "./dashboard-shell";
 
 describe("DashboardShell", () => {
-  it("renders plugin slot loading state", () => {
+  it("renders plugin slot loading state", async () => {
     render(<DashboardShell />);
-    expect(screen.getByText("Loading plugin...")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText("Loading plugin...")).toBeInTheDocument();
+    });
   });
 });
