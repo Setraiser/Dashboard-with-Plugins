@@ -10,6 +10,10 @@ export function initDefaultRegistry(): void {
       id: "clock",
       loader: () => import("../plugins/clock"),
     },
+    {
+      id: "todo",
+      loader: () => import("../plugins/todo"),
+    },
   ]);
 
   initialized = true;

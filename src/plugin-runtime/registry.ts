@@ -32,7 +32,7 @@ export async function loadPlugin(pluginId: string): Promise<PluginModule> {
   const errors = validateManifest(pluginModule.manifest);
   if (errors.length > 0) {
     throw new Error(
-      `Plugin "${pluginId}" manifest is invalid: ${errors.join(" ")}`,
+      `Plugin "${pluginId}" manifest is invalid: ${errors.join(" ")}`
     );
   }
 
