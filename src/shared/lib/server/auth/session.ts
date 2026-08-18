@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/shared/lib/server";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE_NAME, SESSION_DURATION_DAYS } from "./constants";

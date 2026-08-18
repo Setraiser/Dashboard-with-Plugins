@@ -1,7 +1,10 @@
+import "server-only";
+
 import { prisma } from "@/shared/lib/server";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { SESSION_COOKIE_NAME, SESSION_DURATION_DAYS } from "./constants";
+
 export const getCurrentUser = cache(async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
@@ -50,15 +53,3 @@ export const getCurrentUser = cache(async () => {
   // 4. Возвращаем пользователя
   return session.user;
 });
-
-export async function requireUser() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    // Импортируем динамически, чтобы избежать ошибок в клиентских компонентах
-    const { redirect } = await import("next/navigation");
-    redirect("/login");
-  }
-
-  return user;
-}
