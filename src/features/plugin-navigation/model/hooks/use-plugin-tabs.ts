@@ -1,24 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { initDefaultRegistry } from "@/plugin-runtime/default-registry";
 import { getRegisteredPluginIds, loadPlugin } from "@/plugin-runtime/registry";
+import { useEffect, useState } from "react";
 import type { PluginTabItem } from "../types/types";
 
 function toErrorMessage(err: unknown): string {
-  return err instanceof Error ? err.message : "Failed to load plugin navigation.";
+  return err instanceof Error
+    ? err.message
+    : "Failed to load plugin navigation.";
+}
+
+function isFulfilled<T>(
+  result: PromiseSettledResult<T>
+): result is PromiseFulfilledResult<T> {
+  return result.status === "fulfilled";
 }
 
 async function loadPluginTabs(
-  signal: AbortSignal,
+  signal: AbortSignal
 ): Promise<PluginTabItem[] | null> {
   initDefaultRegistry();
   const ids = getRegisteredPluginIds();
-  const modules = await Promise.all(ids.map((id) => loadPlugin(id)));
+  const modules = await Promise.allSettled(ids.map((id) => loadPlugin(id)));
   if (signal.aborted) return null;
-  return modules.map((module) => ({
-    id: module.manifest.id,
-    displayName: module.manifest.displayName,
+  return modules.filter(isFulfilled).map(({ value }) => ({
+    id: value.manifest.id,
+    displayName: value.manifest.displayName,
   }));
 }
 

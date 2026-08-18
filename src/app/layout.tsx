@@ -1,7 +1,7 @@
+import { AppQueryProvider } from "@/app/providers/query-provider/query-provider";
+import { combineClassNames } from "@/shared/lib/utils/combineClassNames/combine-class-names";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { AppQueryProvider } from "@/app/providers/query-provider";
-import { combineClassNames } from "@/shared/lib/utils/combineClassNames/combine-class-names";
 import "./globals.css";
 import cls from "./layout.module.scss";
 

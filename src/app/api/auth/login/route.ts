@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { login } from "@/features/auth";
+import { login } from "@/features/auth/login/server/login";
 
 export async function POST(request: Request) {
   try {
@@ -8,11 +8,20 @@ export async function POST(request: Request) {
 
     const user = await login(body);
 
+    if (!user) {
+      return NextResponse.json(
+        { message: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
     return NextResponse.json(user);
-  } catch (_error) {
+  } catch (error) {
+    console.error("POST /api/auth/login failed:", error);
+
     return NextResponse.json(
-      { message: "Invalid email or password" },
-      { status: 401 }
+      { message: "Internal server error" },
+      { status: 500 }
     );
   }
 }

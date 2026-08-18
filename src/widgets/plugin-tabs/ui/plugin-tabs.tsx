@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { combineClassNames } from "@/shared/lib/utils/combineClassNames/combine-class-names";
-import type { PluginTabsProps } from "./types";
+import Link from "next/link";
 import cls from "./plugin-tabs.module.scss";
+import type { PluginTabsProps } from "./types";
 
 export function PluginTabs({ items, activePluginId }: PluginTabsProps) {
   if (items.length === 0) return null;
@@ -16,7 +16,7 @@ export function PluginTabs({ items, activePluginId }: PluginTabsProps) {
           return (
             <li key={item.id}>
               <Link
-                href={`/${item.id}`}
+                href={`/dashboard/plugins/${item.id}`}
                 className={combineClassNames(cls.link, {
                   [cls.linkActive]: isActive,
                 })}
