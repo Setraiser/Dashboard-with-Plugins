@@ -1,3 +1,4 @@
+import { TodoPriority } from "@/plugins/todo/entities/todo";
 import { prisma } from "@/shared/lib/server";
 import argon2 from "argon2";
 import "dotenv/config";
@@ -24,11 +25,13 @@ async function main() {
         text: "Learn Prisma",
         completed: false,
         userId: admin.id,
+        priority: TodoPriority.Low,
       },
       {
         text: "Finish Dashboard",
         completed: true,
         userId: admin.id,
+        priority: TodoPriority.High,
       },
     ],
   });

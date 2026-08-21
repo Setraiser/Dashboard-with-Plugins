@@ -18,6 +18,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum TodoPriority {
+  Low    @map("low")
+  Medium @map("medium")
+  High   @map("high")
+}
+
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
@@ -48,10 +54,10 @@ model Session {
 }
 
 model Todo {
-  id        String  @id @default(cuid())
+  id        String       @id @default(cuid())
   text      String
-  completed Boolean @default(false)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  completed Boolean      @default(false)
+  priority  TodoPriority @default(Low)
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
 }
