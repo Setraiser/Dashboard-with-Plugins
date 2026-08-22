@@ -2,11 +2,7 @@ import { prisma } from "@/shared/lib/server/prisma/client";
 import { hashPassword } from "../auth/password";
 import { RegisterDto } from "../register/types";
 
-export async function registerUser({
-  email,
-  password,
-  displayName,
-}: RegisterDto) {
+export async function registerUser({ email, password, name }: RegisterDto) {
   const existingUser = await prisma.user.findUnique({
     where: { email },
   });
@@ -21,7 +17,7 @@ export async function registerUser({
     data: {
       email,
       passwordHash,
-      displayName,
+      name,
     },
   });
 }
