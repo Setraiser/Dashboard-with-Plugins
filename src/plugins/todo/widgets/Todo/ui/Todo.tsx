@@ -2,76 +2,62 @@
 
 import { TodoItem, TodoPriority, todosStore } from '@/plugins/todo/entities/todo';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
-
-/* 
-@action addTodo(text: string) {
-    const newTodo = { id: Date.now().toString(), text, completed: false, priority: TodoPriority.Low };
-    this.todos.push(newTodo);
-  }
-
-  @action deleteTodo(id: string) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
-  }
-
-  @action toggleCompleted(id: string) {
-    this.todos = this.todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
-  }
-
-  @action setPriority(id: string, priority: TodoPriority) {
-    this.todos = this.todos.map(todo => todo.id === id ? { ...todo, priority } : todo);
-  }
-
-
-*/
+import { useEffect, useState } from 'react';
 
 const Todos: React.FC = () => {
 
-  const [todos, setTodos] = useState(todosStore.todos);
+  const [value, setValue] = useState<string>("");
 
-  /*  useEffect(() => {
-     // Обновляем состояние из store once on mount. MobX observer will handle updates.
-     setTodos(todosStore.todos);
-   }, []); */
+  useEffect(() => {
+    todosStore.getTodos();
+  }, []);
 
   const addTodo = (text: string) => {
     todosStore.addTodo(text);
-    setTodos([...todosStore.todos]);
-  };
+  }
+
 
   const deleteTodo = (id: string) => {
     todosStore.deleteTodo(id);
-    setTodos([...todosStore.todos]);
   };
 
   const toggleCompleted = (id: string) => {
     todosStore.toggleCompleted(id);
-    setTodos([...todosStore.todos]);
   };
 
   const setPriority = (id: string, priority: TodoPriority) => {
     todosStore.setPriority(id, priority);
-    setTodos([...todosStore.todos]);
   };
 
+  const changeText = (id: string, text: string) => {
+    todosStore.changeText(id, text);
+  };
+
+  const saveTodos = () => {
+    todosStore.save();
+  }
 
   return (
     <div>
       <input
         type="text"
         placeholder="Add a new todo..."
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter') {
             const target = e.target as HTMLInputElement;
             addTodo(target.value);
+            setValue("");
           }
         }}
       />
       <ul>
-        {todos.map(todo =>
-          <TodoItem key={todo.id} todo={todo} deleteTodo={deleteTodo} toggleCompleted={toggleCompleted} setPriority={setPriority} />
+        {todosStore.todoList.map((todo) =>
+          <TodoItem key={todo.id} todo={todo} changeText={changeText} deleteTodo={deleteTodo} toggleCompleted={toggleCompleted} setPriority={setPriority} />
         )}
       </ul>
+      <input type="button" value="Save Todos" onClick={saveTodos} />
     </div>
   );
 };
