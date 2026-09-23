@@ -1,4 +1,4 @@
-import { deleteTodo } from "@/plugins/todo/server/delete";
+import { deleteTodo } from "@/plugin-host/todo/server/requests/delete";
 import { apiHandler } from "@/shared/lib/server/apiHandler/apiHandler";
 
 export async function DELETE(

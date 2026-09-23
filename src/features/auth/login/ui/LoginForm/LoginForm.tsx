@@ -26,7 +26,6 @@ export function LoginForm() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log('Login data:', data);
     await loginRequest(data);
     router.replace("/dashboard/plugins");
   };
