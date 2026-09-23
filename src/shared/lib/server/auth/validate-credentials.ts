@@ -9,7 +9,6 @@ export async function validateCredentials(email: string, password: string) {
       passwordHash: true,
     },
   });
-  console.log(user, "FIND_USER");
   if (!user) {
     return null;
   }

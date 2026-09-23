@@ -16,7 +16,15 @@ export const getCurrentUser = cache(async () => {
   // 1. Ищем сессию в БД по токену
   const session = await prisma.session.findUnique({
     where: { token },
-    include: { user: true },
+    include: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
+    },
   });
 
   // 2. Проверяем, что сессия существует и не истекла

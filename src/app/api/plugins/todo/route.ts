@@ -1,7 +1,7 @@
-import { IUpdateTodoInput } from "@/plugins/todo/entities/todo";
-import { createTodo } from "@/plugins/todo/server/create";
-import { getTodos } from "@/plugins/todo/server/get";
-import { updateTodos } from "@/plugins/todo/server/update";
+import { createTodoSchema, updateTodosSchema } from "@/plugin-host/todo";
+import { createTodo } from "@/plugin-host/todo/server/requests/create";
+import { getTodos } from "@/plugin-host/todo/server/requests/get";
+import { updateTodos } from "@/plugin-host/todo/server/requests/update";
 import { apiHandler } from "@/shared/lib/server/apiHandler/apiHandler";
 
 export async function GET(request: Request) {
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   return apiHandler(async () => {
-    const { text, priority } = await request.json();
+    const { text, priority } = createTodoSchema.parse(await request.json());
 
     return createTodo({ text, priority });
   });
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   return apiHandler(async () => {
-    const body = (await request.json()) as IUpdateTodoInput[];
+    const body = updateTodosSchema.parse(await request.json());
 
     return updateTodos(body);
   });

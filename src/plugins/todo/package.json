@@ -1,0 +1,19 @@
+{
+  "name": "@plugins/todo",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "mobx": "^6.15.3",
+    "mobx-react-lite": "^4.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19"
+  }
+}

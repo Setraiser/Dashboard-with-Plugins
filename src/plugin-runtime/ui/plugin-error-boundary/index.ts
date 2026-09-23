@@ -2,4 +2,4 @@ export { PluginErrorBoundary } from "./plugin-error-boundary";
 export type {
   PluginErrorBoundaryProps,
   PluginErrorBoundaryState,
-} from "./types";
+} from "../../model/types/plugin-error-boundary";

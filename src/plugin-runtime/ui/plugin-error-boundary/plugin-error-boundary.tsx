@@ -4,7 +4,7 @@ import { Component, type ReactNode } from "react";
 import type {
   PluginErrorBoundaryProps,
   PluginErrorBoundaryState,
-} from "./types";
+} from "../../model/types/plugin-error-boundary";
 
 export class PluginErrorBoundary extends Component<
   PluginErrorBoundaryProps,

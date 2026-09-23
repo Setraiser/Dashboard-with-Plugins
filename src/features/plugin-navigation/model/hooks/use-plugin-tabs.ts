@@ -1,7 +1,10 @@
 "use client";
 
-import { initDefaultRegistry } from "@/plugin-runtime/default-registry";
-import { getRegisteredPluginIds, loadPlugin } from "@/plugin-runtime/registry";
+import { initDefaultRegistry } from "@/plugin-runtime/model/registry/default-registry";
+import {
+  getRegisteredPluginIds,
+  loadPlugin,
+} from "@/plugin-runtime/model/registry/registry";
 import { useEffect, useState } from "react";
 import type { PluginTabItem } from "../types/types";
 

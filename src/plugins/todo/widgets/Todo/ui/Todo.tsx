@@ -1,28 +1,48 @@
 "use client";
 
-import { TodoItem, TodoPriority, todosStore } from '@/plugins/todo/entities/todo';
+import { TodoItem, TodosStore } from '@/plugins/todo/entities/todo';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { ITodoItem, TodoPriority, useTodoApi, useTodoHandlers } from "../../../entities/todo";
+import { ITodoProps } from "../types/todo";
 
-const Todos: React.FC = () => {
+const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
+
+
+  const { todoApi } = pluginDependencies;
 
   const [value, setValue] = useState<string>("");
 
-  useEffect(() => {
-    todosStore.getTodos();
-  }, []);
+  const todoQueries = useTodoApi(todoApi);
+
+
+  const todosStore = useMemo(() => new TodosStore(), []);
+  const { handleCreateTodo, handleDeleteTodo, handleSave } = useTodoHandlers(todosStore, todoQueries);
+
+  const {
+    data: todos = [],
+  } = todoQueries.getTodos;
+
+
+  const visibleTodos = todos.map((todo) => {
+    const changes = todosStore.getChanges(todo.id);
+
+    return changes
+      ? { ...todo, ...changes }
+      : todo;
+  });
 
   const addTodo = (text: string) => {
-    todosStore.addTodo(text);
+    handleCreateTodo({ text, priority: TodoPriority.Low });
   }
 
 
   const deleteTodo = (id: string) => {
-    todosStore.deleteTodo(id);
+    handleDeleteTodo(id);
   };
 
-  const toggleCompleted = (id: string) => {
-    todosStore.toggleCompleted(id);
+  const toggleCompleted = (todoItem: ITodoItem) => {
+    todosStore.toggleCompleted(todoItem);
   };
 
   const setPriority = (id: string, priority: TodoPriority) => {
@@ -34,7 +54,7 @@ const Todos: React.FC = () => {
   };
 
   const saveTodos = () => {
-    todosStore.save();
+    handleSave();
   }
 
   return (
@@ -53,8 +73,15 @@ const Todos: React.FC = () => {
         }}
       />
       <ul>
-        {todosStore.todoList.map((todo) =>
-          <TodoItem key={todo.id} todo={todo} changeText={changeText} deleteTodo={deleteTodo} toggleCompleted={toggleCompleted} setPriority={setPriority} />
+        {visibleTodos.map((todo) =>
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            changeText={changeText}
+            deleteTodo={deleteTodo}
+            toggleCompleted={toggleCompleted}
+            setPriority={setPriority}
+          />
         )}
       </ul>
       <input type="button" value="Save Todos" onClick={saveTodos} />

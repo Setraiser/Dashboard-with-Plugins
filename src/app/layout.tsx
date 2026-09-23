@@ -1,5 +1,6 @@
-import { AppQueryProvider } from "@/app/providers/query-provider/query-provider";
+import { AppQueryProvider } from "@/app/providers/query-provider";
 import { combineClassNames } from "@/shared/lib/utils/combineClassNames/combine-class-names";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -32,7 +33,10 @@ export default function RootLayout({
     >
       <body>
         <div className={cls.hostRoot}>
-          <AppQueryProvider>{children}</AppQueryProvider>
+          <AppQueryProvider>
+            {children}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </AppQueryProvider>
         </div>
       </body>
     </html>

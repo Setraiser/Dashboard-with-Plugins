@@ -8,16 +8,16 @@ export async function POST(request: Request) {
 
     const user = await login(body);
 
-    if (!user) {
+    return NextResponse.json(user);
+  } catch (error) {
+    console.error("POST /api/auth/login failed:", error);
+
+    if (error instanceof Error && error.message === "INVALID_CREDENTIALS") {
       return NextResponse.json(
         { message: "Invalid email or password" },
         { status: 401 }
       );
     }
-
-    return NextResponse.json(user);
-  } catch (error) {
-    console.error("POST /api/auth/login failed:", error);
 
     return NextResponse.json(
       { message: "Internal server error" },
