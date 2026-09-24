@@ -1,3 +1,5 @@
+import { TodoWidgetAdapter } from "./adapter";
+
 export { TodoPriority } from "./entities/todo/modules/types/types";
 export type {
   ICreateTodoInput,
@@ -5,7 +7,6 @@ export type {
   ITodoItem,
   IUpdateTodoInput,
 } from "./entities/todo/modules/types/types";
-import { TodoWidgetAdapter } from "./adapter";
 
 const todoPlugin = {
   manifest: {
