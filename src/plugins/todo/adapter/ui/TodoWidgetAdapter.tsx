@@ -1,3 +1,5 @@
+"use client"
+
 import { Todo } from "../../widgets/Todo";
 import { isTodoPluginDependencies } from "../utils/isTodoPluginDependencies";
 

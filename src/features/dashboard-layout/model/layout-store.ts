@@ -1,9 +1,10 @@
 import { create } from "zustand";
 
-interface DashboardWidget {
+export interface DashboardWidget {
   instanceId: string;
   pluginId: string;
-  slot: "dashboard.main" | "dashboard.sidebar";
+  slot?: string;
+  config?: Record<string, unknown>;
 }
 
 interface DashboardLayoutState {
