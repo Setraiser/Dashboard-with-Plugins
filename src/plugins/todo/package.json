@@ -7,13 +7,15 @@
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.0.0",
-    "mobx": "^6.15.3",
-    "mobx-react-lite": "^4.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
-    "@types/react": "19"
+    "@types/react": "19",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "tailwindcss": "^4.3.3"
   }
 }

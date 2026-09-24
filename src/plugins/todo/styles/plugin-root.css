@@ -1,0 +1,36 @@
+.todo-plugin-root {
+  color: var(--color-todo-ink);
+  background: var(--color-todo-bg);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  line-height: 1.4;
+}
+
+.todo-plugin-root,
+.todo-plugin-root *,
+.todo-plugin-root *::before,
+.todo-plugin-root *::after {
+  box-sizing: border-box;
+}
+
+.todo-plugin-root h1,
+.todo-plugin-root h2,
+.todo-plugin-root h3,
+.todo-plugin-root h4,
+.todo-plugin-root p,
+.todo-plugin-root ul,
+.todo-plugin-root ol,
+.todo-plugin-root li,
+.todo-plugin-root form,
+.todo-plugin-root fieldset,
+.todo-plugin-root figure,
+.todo-plugin-root blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+.todo-plugin-root button,
+.todo-plugin-root input,
+.todo-plugin-root select,
+.todo-plugin-root textarea {
+  font: inherit;
+}
