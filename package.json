@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "prisma": "npx prisma studio"
+    "prisma": "npx prisma studio",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.6",
