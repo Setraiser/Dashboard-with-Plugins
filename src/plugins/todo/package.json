@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "mobx": "^6.15.3",
+    "mobx-react-lite": "^4.1.1"
   }
 }
