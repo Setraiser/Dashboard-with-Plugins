@@ -14,7 +14,7 @@ export function Breadcrumbs() {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-4 sm:mb-5 md:mb-6">
+    <nav aria-label="Breadcrumb">
       <ol className="flex flex-wrap items-center gap-1.5 text-sm text-slate-600 sm:text-[15px] dark:text-slate-300">
         {items.map((item, index) => {
           const isCurrent = index === items.length - 1;
