@@ -3,16 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { LOGIN_SCHEMA, LoginFormData } from "../../model/const/loginSchema";
 import { loginRequest } from "../../server/loginRequest";
-
-
-const loginSchema = z.object({
-  email: z.email('Некорректный email'),
-  password: z.string().min(6, 'Пароль должен содержать минимум 6 символов'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const {
@@ -20,7 +12,7 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(LOGIN_SCHEMA),
   });
 
   const router = useRouter();
@@ -34,7 +26,7 @@ export function LoginForm() {
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Вход</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email
@@ -42,12 +34,20 @@ export function LoginForm() {
           <input
             id="email"
             type="email"
+            required
             {...register('email')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "email-error" : undefined}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${errors.email
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-blue-500"
+              }`}
             placeholder="your@email.com"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+            <p id="email-error" role="alert" className="mt-1 text-sm text-red-600">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
@@ -58,12 +58,20 @@ export function LoginForm() {
           <input
             id="password"
             type="password"
+            required
             {...register('password')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? "password-error" : undefined}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${errors.password
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-blue-500"
+              }`}
             placeholder="••••••••"
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+            <p id="password-error" role="alert" className="mt-1 text-sm text-red-600">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
