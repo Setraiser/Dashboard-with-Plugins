@@ -7,6 +7,7 @@ import {
 import { useReportOperationError } from "@/app/providers/error-notifications";
 import { pluginDependencies } from "@/plugin-runtime";
 import { PluginSlot } from "@/plugin-runtime/ui";
+import { LoadingState } from "@/shared/ui/loading-state";
 import { useMemo } from "react";
 import cls from "./plugin-shell.module.scss";
 
@@ -24,7 +25,7 @@ export function PluginShell({ routePluginId }: PluginShellProps) {
   );
 
   if (error) return <div role="alert">{error}</div>;
-  if (isLoading) return <div>Loading plugins...</div>;
+  if (isLoading) return <LoadingState label="Loading plugins..." />;
   if (!activePluginId) {
     return (
       <main className={cls.root}>
