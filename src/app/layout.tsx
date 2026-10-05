@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" className={combineClassNames(geistSans.variable)}>
       <body>
         <div
-          className="flex-1 flex min-h-full flex-col bg-white text-[#171717] [--dashboard-host-tab-border:#d1d5db] [--dashboard-host-tab-bg:#ffffff] [--dashboard-host-tab-text:#111827] [--dashboard-host-tab-active-border:#2563eb] [--dashboard-host-tab-active-bg:#eff6ff] [--dashboard-host-tab-active-text:#1d4ed8] [font-family:var(--font-geist-sans),Arial,Helvetica,sans-serif] antialiased [&_a]:text-inherit [&_a]:no-underline dark:bg-[#0a0a0a] dark:text-[#ededed] dark:[--dashboard-host-tab-border:#374151] dark:[--dashboard-host-tab-bg:#111827] dark:[--dashboard-host-tab-text:#f3f4f6] dark:[--dashboard-host-tab-active-border:#3b82f6] dark:[--dashboard-host-tab-active-bg:#1e3a8a33] dark:[--dashboard-host-tab-active-text:#93c5fd]"
+          className="flex min-h-full flex-1 flex-col text-slate-800 [--dashboard-host-tab-border:#d9e1ee] [--dashboard-host-tab-bg:#ffffffcc] [--dashboard-host-tab-text:#334155] [--dashboard-host-tab-active-border:#6366f1] [--dashboard-host-tab-active-bg:#eef2ff] [--dashboard-host-tab-active-text:#4338ca] [font-family:var(--font-geist-sans),Arial,Helvetica,sans-serif] antialiased [&_a]:text-inherit [&_a]:no-underline dark:text-slate-100 dark:[--dashboard-host-tab-border:#334155] dark:[--dashboard-host-tab-bg:#0f172acc] dark:[--dashboard-host-tab-text:#e2e8f0] dark:[--dashboard-host-tab-active-border:#818cf8] dark:[--dashboard-host-tab-active-bg:#312e8133] dark:[--dashboard-host-tab-active-text:#c7d2fe]"
         >
           <ErrorNotificationProvider>
             <AppQueryProvider>
