@@ -74,4 +74,17 @@ describe("plugin shell dashboard rendering", () => {
 
     expect(screen.getByRole("alert")).toHaveTextContent("Plugin route was not found.");
   });
+
+  it("renders an accessible loading state while plugins are loading", () => {
+    mockUsePluginTabs.mockReturnValue({
+      tabs: [],
+      error: null,
+      isLoading: true,
+    });
+
+    render(<PluginShell routePluginId="todo" />);
+
+    expect(screen.getByRole("status")).toHaveTextContent("Loading plugins...");
+    expect(screen.getByRole("status")).toHaveAttribute("aria-busy", "true");
+  });
 });
