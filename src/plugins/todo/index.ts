@@ -13,6 +13,7 @@ const todoPlugin = {
     id: "todo",
     version: "1.0.0",
     displayName: "Todo",
+    description: "Task Manager",
   },
   Widget: TodoWidgetAdapter,
   dispose: () => {},

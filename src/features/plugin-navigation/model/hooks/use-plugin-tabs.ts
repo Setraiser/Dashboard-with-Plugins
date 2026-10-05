@@ -30,6 +30,7 @@ async function loadPluginTabs(
   return modules.filter(isFulfilled).map(({ value }) => ({
     id: value.manifest.id,
     displayName: value.manifest.displayName,
+    description: value.manifest.description,
   }));
 }
 
