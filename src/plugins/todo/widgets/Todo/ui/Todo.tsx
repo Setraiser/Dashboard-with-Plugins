@@ -4,13 +4,26 @@ import { TodoItem, TodosStore } from '@/plugins/todo/entities/todo';
 import { TodoButton, TodoInput } from '@/plugins/todo/shared/ui';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useMemo, useState } from 'react';
-import { ITodoItem, TodoPriority, useTodoApi, useTodoHandlers } from "../../../entities/todo";
+import {
+  ITodoItem,
+  TodoPriority,
+  useDebounce,
+  useTodoApi,
+  useTodoFilters,
+  useTodoHandlers,
+} from "../../../entities/todo";
+import { priorityLabels } from "../../../entities/todo/modules/types/types";
+import { TodoPriorityFilter, TodoStatusFilter } from "../../../entities/todo/modules/hooks/useTodoFilters";
 import { ITodoProps } from "../types/todo";
 import { TodoErrorToast } from "./TodoErrorToast";
 
 const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
   const { todoApi, reportOperationError } = pluginDependencies;
   const [value, setValue] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>("all");
+  const [priorityFilter, setPriorityFilter] = useState<TodoPriorityFilter>(null);
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleOperationError = useCallback(
@@ -35,6 +48,12 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
     const changes = todosStore.getChanges(todo.id);
 
     return changes ? { ...todo, ...changes } : todo;
+  });
+  const filteredTodos = useTodoFilters({
+    todos: visibleTodos,
+    statusFilter,
+    priorityFilter,
+    searchQuery: debouncedSearchQuery,
   });
 
   const addTodo = async (text: string) => {
@@ -121,15 +140,124 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
             </div>
           </form>
 
+          <div className="space-y-3 rounded-2xl border border-todo-border bg-todo-surface-alt p-3">
+            <div className="min-w-0">
+              <label htmlFor="todo-search" className="sr-only">
+                Search tasks
+              </label>
+              <input
+                id="todo-search"
+                type="search"
+                value={searchQuery}
+                aria-label="Search tasks by name"
+                placeholder="Search tasks..."
+                onChange={(event) => setSearchQuery(event.target.value)}
+                className="w-full rounded-xl border border-todo-border bg-todo-surface px-3 py-2 text-sm text-todo-ink placeholder:text-todo-muted focus-visible:border-todo-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-todo-ring"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+              <div className="flex min-w-0 flex-col gap-1.5">
+                <span className="px-1 text-[10px] font-semibold uppercase tracking-wider text-todo-muted">
+                  Status
+                </span>
+                <div
+                  role="group"
+                  aria-label="Filter tasks by status"
+                  className="inline-flex w-fit max-w-full rounded-xl border border-todo-border bg-todo-surface p-1"
+                >
+                  {(
+                    [
+                      ["all", "All"],
+                      ["active", "Active"],
+                      ["completed", "Completed"],
+                    ] as const
+                  ).map(([filter, label]) => {
+                    const isSelected = statusFilter === filter;
+
+                    return (
+                      <button
+                        key={filter}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() => setStatusFilter(filter)}
+                        className={[
+                          "rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-todo-ring",
+                          isSelected
+                            ? "bg-todo-primary text-white shadow-sm"
+                            : "text-todo-muted hover:text-todo-ink",
+                        ].join(" ")}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex min-w-0 flex-col gap-1.5">
+                <span className="px-1 text-[10px] font-semibold uppercase tracking-wider text-todo-muted">
+                  Priority
+                </span>
+                <div
+                  role="group"
+                  aria-label="Filter tasks by priority"
+                  className="inline-flex w-fit max-w-full rounded-xl border border-todo-border bg-todo-surface p-1"
+                >
+                  {(
+                    [
+                      [null, "All"],
+                      [TodoPriority.Low, priorityLabels[TodoPriority.Low]],
+                      [TodoPriority.Medium, priorityLabels[TodoPriority.Medium]],
+                      [TodoPriority.High, priorityLabels[TodoPriority.High]],
+                    ] as const
+                  ).map(([filter, label]) => {
+                    const isSelected = priorityFilter === filter;
+
+                    return (
+                      <button
+                        key={filter ?? "all"}
+                        type="button"
+                        aria-label={
+                          filter === null ? "All priorities" : label
+                        }
+                        aria-pressed={isSelected}
+                        onClick={() => setPriorityFilter(filter)}
+                        className={[
+                          "rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-todo-ring",
+                          isSelected
+                            ? "bg-todo-primary text-white shadow-sm"
+                            : "text-todo-muted hover:text-todo-ink",
+                        ].join(" ")}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-3">
-            {visibleTodos.length === 0 ? (
+            {filteredTodos.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-todo-border bg-todo-surface-alt px-4 py-10 text-center">
-                <p className="text-base font-medium text-slate-700">No tasks yet.</p>
-                <p className="mt-1 text-sm text-slate-500">Add your first task to get started.</p>
+                {visibleTodos.length === 0 ? (
+                  <>
+                    <p className="text-base font-medium text-slate-700">No tasks yet.</p>
+                    <p className="mt-1 text-sm text-slate-500">Add your first task to get started.</p>
+                  </>
+                ) : (
+                  <p className="text-base font-medium text-slate-700">
+                    No tasks match the selected filters.
+                  </p>
+                )}
               </div>
             ) : (
               <ul className="space-y-3">
-                {visibleTodos.map((todo) => (
+                {filteredTodos.map((todo) => (
                   <TodoItem
                     key={todo.id}
                     todo={todo}
