@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { LoginForm } from "./login/ui/LoginForm/LoginForm";
 import { loginRequest } from "./login/server/loginRequest";
+import { ApiClientError } from "@/shared/lib/server/apiClient/api-client-error";
 import { RegisterForm } from "./register/ui/RegisterForm/RegisterForm";
 import { registerRequest } from "./register/server/registerRequest";
 
@@ -57,7 +58,9 @@ describe("authentication form validation", () => {
   });
 
   it("shows a readable server error when login fails", async () => {
-    mockLoginRequest.mockRejectedValue(new Error("Invalid email or password."));
+    mockLoginRequest.mockRejectedValue(
+      new ApiClientError(401, "Raw server error"),
+    );
 
     render(<LoginForm />);
     fireEvent.change(screen.getByLabelText("Email"), {
@@ -69,13 +72,36 @@ describe("authentication form validation", () => {
     fireEvent.click(screen.getByRole("button", { name: "Войти" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "Invalid email or password.",
+      "Неверный email или пароль.",
+    );
+    expect(screen.getByRole("alert")).not.toHaveTextContent("Raw server error");
+  });
+
+  it("does not expose raw server errors for unexpected login failures", async () => {
+    mockLoginRequest.mockRejectedValue(
+      new ApiClientError(500, "Database credentials leaked"),
+    );
+
+    render(<LoginForm />);
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "user@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText("Пароль"), {
+      target: { value: "secret1" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Войти" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Не удалось выполнить вход. Попробуйте ещё раз.",
+    );
+    expect(screen.getByRole("alert")).not.toHaveTextContent(
+      "Database credentials leaked",
     );
   });
 
   it("shows a readable server error when registration fails", async () => {
     mockRegisterRequest.mockRejectedValue(
-      new Error("An account with this email already exists."),
+      new ApiClientError(409, "Raw server conflict message"),
     );
 
     render(<RegisterForm />);
@@ -95,7 +121,10 @@ describe("authentication form validation", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toHaveTextContent(
-        "An account with this email already exists.",
+        "Аккаунт с таким email уже существует.",
+      );
+      expect(screen.getByRole("alert")).not.toHaveTextContent(
+        "Raw server conflict message",
       );
     });
   });

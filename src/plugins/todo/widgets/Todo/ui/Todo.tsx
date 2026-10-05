@@ -3,15 +3,29 @@
 import { TodoItem, TodosStore } from '@/plugins/todo/entities/todo';
 import { TodoButton, TodoInput } from '@/plugins/todo/shared/ui';
 import { observer } from 'mobx-react-lite';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ITodoItem, TodoPriority, useTodoApi, useTodoHandlers } from "../../../entities/todo";
 import { ITodoProps } from "../types/todo";
+import { TodoErrorToast } from "./TodoErrorToast";
 
 const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
-  const { todoApi } = pluginDependencies;
+  const { todoApi, reportOperationError } = pluginDependencies;
   const [value, setValue] = useState<string>("");
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  const todoQueries = useTodoApi(todoApi);
+  const handleOperationError = useCallback(
+    (error: unknown, fallbackMessage: string) => {
+      if (reportOperationError) {
+        reportOperationError(error, fallbackMessage);
+        return;
+      }
+
+      setLocalError(fallbackMessage);
+    },
+    [reportOperationError],
+  );
+
+  const todoQueries = useTodoApi(todoApi, handleOperationError);
   const todosStore = useMemo(() => new TodosStore(), []);
   const { handleCreateTodo, handleDeleteTodo, handleSave } = useTodoHandlers(todosStore, todoQueries);
 
@@ -58,6 +72,9 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
 
   return (
     <div className="todo-plugin-root mx-auto w-full max-w-3xl p-3 sm:p-5">
+      {localError && (
+        <TodoErrorToast message={localError} onDismiss={() => setLocalError(null)} />
+      )}
       <section className="overflow-hidden rounded-2xl border border-todo-border bg-todo-surface text-todo-ink shadow-[0_14px_44px_rgba(15,23,42,0.12)] dark:shadow-[0_18px_50px_rgba(2,6,23,0.45)]">
         <div
           className="border-b border-todo-border bg-todo-surface-alt"

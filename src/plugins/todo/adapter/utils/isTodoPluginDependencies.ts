@@ -18,6 +18,8 @@ export function isTodoPluginDependencies(
   }
 
   return (
+    (!("reportOperationError" in value) ||
+      typeof value.reportOperationError === "function") &&
     "getTodos" in api &&
     typeof api.getTodos === "function" &&
     "createTodo" in api &&
