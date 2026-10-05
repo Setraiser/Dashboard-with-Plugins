@@ -19,8 +19,8 @@ describe("Breadcrumbs", () => {
     });
   });
 
-  it("shows the dashboard, plugins, and active plugin hierarchy", () => {
-    mockUsePathname.mockReturnValue("/dashboard/plugins/todo");
+  it("shows the dashboard and active plugin hierarchy", () => {
+    mockUsePathname.mockReturnValue("/dashboard/todo");
 
     render(<Breadcrumbs />);
 
@@ -29,10 +29,7 @@ describe("Breadcrumbs", () => {
       "href",
       "/dashboard",
     );
-    expect(screen.getByRole("link", { name: "Plugins" })).toHaveAttribute(
-      "href",
-      "/dashboard/plugins",
-    );
+    expect(screen.queryByRole("link", { name: "Plugins" })).not.toBeInTheDocument();
     expect(screen.getByText("Todo list")).toHaveAttribute("aria-current", "page");
   });
 

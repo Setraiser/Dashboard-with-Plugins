@@ -19,7 +19,7 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     await registerRequest(data);
-    router.replace(`/dashboard/plugins`);
+    router.replace("/dashboard");
 
   };
 

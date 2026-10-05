@@ -10,9 +10,15 @@ export function MainPluginShell() {
   if (isLoading) return <div>Loading plugins...</div>;
 
   return (
-    <main className="">
+    <section className="mr-auto w-full max-w-6xl text-left" aria-labelledby="plugins-heading">
+      <h2
+        id="plugins-heading"
+        className="mb-4 text-xl font-semibold text-slate-900 sm:text-2xl dark:text-white"
+      >
+        Plugins
+      </h2>
       <PluginTabs items={tabs} activePluginId={null} />
-    </main>
+    </section>
   );
 }
 
