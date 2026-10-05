@@ -26,6 +26,7 @@ describe("plugin navigation dashboard wiring", () => {
       manifest: {
         id,
         displayName: id === "todo" ? "Todo" : "Clock",
+        description: id === "todo" ? "Task Manager" : "Clock",
       },
     }));
 
@@ -33,8 +34,8 @@ describe("plugin navigation dashboard wiring", () => {
 
     await waitFor(() => {
       expect(result.current.tabs).toEqual([
-        { id: "todo", displayName: "Todo" },
-        { id: "clock", displayName: "Clock" },
+        { id: "todo", displayName: "Todo", description: "Task Manager" },
+        { id: "clock", displayName: "Clock", description: "Clock" },
       ]);
     });
 
@@ -54,6 +55,7 @@ describe("plugin navigation dashboard wiring", () => {
         manifest: {
           id: "todo",
           displayName: "Todo",
+          description: "Task Manager",
         },
       };
     });
@@ -61,7 +63,9 @@ describe("plugin navigation dashboard wiring", () => {
     const { result } = renderHook(() => usePluginTabs());
 
     await waitFor(() => {
-      expect(result.current.tabs).toEqual([{ id: "todo", displayName: "Todo" }]);
+      expect(result.current.tabs).toEqual([
+        { id: "todo", displayName: "Todo", description: "Task Manager" },
+      ]);
     });
 
     expect(result.current.error).toBeNull();
@@ -82,8 +86,8 @@ describe("plugin navigation dashboard wiring", () => {
 
   it("picks the first route tab or rejects an unknown active plugin id", () => {
     const tabs = [
-      { id: "todo", displayName: "Todo" },
-      { id: "clock", displayName: "Clock" },
+      { id: "todo", displayName: "Todo", description: "Task Manager" },
+      { id: "clock", displayName: "Clock", description: "Clock" },
     ];
 
     expect(pickActivePluginId(undefined, tabs)).toBe("todo");

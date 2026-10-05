@@ -22,7 +22,7 @@ jest.mock("@/plugin-runtime/ui", () => ({
 }));
 
 jest.mock("@/widgets/plugin-tabs", () => ({
-  PluginTabs: ({ items, activePluginId }: { items: { id: string; displayName: string }[]; activePluginId: string | null }) => (
+  PluginTabs: ({ items, activePluginId }: { items: { id: string; displayName: string; description: string }[]; activePluginId: string | null }) => (
     <nav aria-label="Plugin navigation">
       <span data-testid="active-plugin-id">{activePluginId ?? "none"}</span>
       {items.map((item) => (
@@ -46,7 +46,7 @@ describe("plugin shell dashboard rendering", () => {
 
   it("renders the active plugin tab and mounts the selected plugin slot", async () => {
     mockUsePluginTabs.mockReturnValue({
-      tabs: [{ id: "todo", displayName: "Todo" }],
+      tabs: [{ id: "todo", displayName: "Todo", description: "Task Manager" }],
       error: null,
       isLoading: false,
     });
@@ -60,7 +60,7 @@ describe("plugin shell dashboard rendering", () => {
 
   it("shows a fallback alert when the route plugin is not registered", () => {
     mockUsePluginTabs.mockReturnValue({
-      tabs: [{ id: "todo", displayName: "Todo" }],
+      tabs: [{ id: "todo", displayName: "Todo", description: "Task Manager" }],
       error: null,
       isLoading: false,
     });

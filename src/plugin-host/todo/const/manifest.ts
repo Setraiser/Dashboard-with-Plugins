@@ -7,6 +7,7 @@ const todoPlugin: PluginModule = {
     id: PluginId.Todo,
     version: "1.0.0",
     displayName: "Todo",
+    description: "Task Manager",
   },
   Widget: Todo as unknown as PluginModule["Widget"],
 };

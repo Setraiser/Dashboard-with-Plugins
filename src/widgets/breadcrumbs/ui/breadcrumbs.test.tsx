@@ -15,7 +15,7 @@ jest.mock("@/features/plugin-navigation", () => ({
 describe("Breadcrumbs", () => {
   beforeEach(() => {
     mockUsePluginTabs.mockReturnValue({
-      tabs: [{ id: "todo", displayName: "Todo list" }],
+      tabs: [{ id: "todo", displayName: "Todo list", description: "Task Manager" }],
     });
   });
 

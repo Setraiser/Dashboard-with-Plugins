@@ -10,6 +10,7 @@ export interface PluginManifest {
   id: string;
   version: string;
   displayName: string;
+  description: string;
 
   configSchema?: PluginConfigSchema;
 }
