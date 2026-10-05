@@ -10,10 +10,30 @@ export async function apiClient<T>(
     },
   });
 
-  const data = await response.json().catch(() => null);
+  const responseText = await response.text();
+  let data: unknown;
+
+  if (responseText) {
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      if (response.ok) {
+        throw new Error("The server returned an invalid response.");
+      }
+    }
+  }
 
   if (!response.ok) {
-    throw new Error(data?.error ?? "Request failed");
+    const errorMessage =
+      typeof data === "object" && data !== null && "error" in data &&
+      typeof data.error === "string"
+        ? data.error
+        : typeof data === "object" && data !== null && "message" in data &&
+            typeof data.message === "string"
+          ? data.message
+          : `Request failed with status ${response.status}.`;
+
+    throw new Error(errorMessage);
   }
 
   return data as T;

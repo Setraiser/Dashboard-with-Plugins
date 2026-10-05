@@ -1,4 +1,5 @@
 import { prisma } from "@/shared/lib/server";
+import { ApiError } from "@/shared/lib/server/apiHandler/api-error";
 import { authHandler } from "@/shared/lib/server/authHandler/authHandler";
 
 interface IDeleteTodo {
@@ -14,7 +15,7 @@ export const deleteTodo = authHandler(async (user, { id }: IDeleteTodo) => {
   });
 
   if (result.count === 0) {
-    throw new Error("Todo not found");
+    throw new ApiError(404, "Todo not found.");
   }
 
   return new Response(null, { status: 204 });

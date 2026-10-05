@@ -1,19 +1,6 @@
 import { POST } from "./route";
 
 const mockLogin = jest.fn();
-const mockNextResponseJson = jest.fn(
-  (body: unknown, init?: { status?: number }) => ({
-    status: init?.status ?? 200,
-    json: async () => body,
-  })
-);
-
-jest.mock("next/server", () => ({
-  NextResponse: {
-    json: (...args: Parameters<typeof mockNextResponseJson>) =>
-      mockNextResponseJson(...args),
-  },
-}));
 
 jest.mock("@/features/auth/login/server/login", () => ({
   login: (...args: unknown[]) => mockLogin(...args),
@@ -55,7 +42,7 @@ describe("auth login endpoint", () => {
 
     expect(response.status).toBe(401);
     expect(await response.json()).toEqual({
-      message: "Invalid email or password",
+      error: "Invalid email or password.",
     });
   });
 
@@ -67,6 +54,35 @@ describe("auth login endpoint", () => {
     );
 
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ message: "Internal server error" });
+    expect(await response.json()).toEqual({
+      error: "An unexpected server error occurred.",
+    });
+  });
+
+  it("returns a readable 400 error for malformed JSON", async () => {
+    const response = await POST({
+      json: async () => {
+        throw new SyntaxError("Unexpected end of JSON input");
+      },
+    } as Request);
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "Request body must contain valid JSON.",
+    });
+  });
+
+  it("returns 400 when the login payload is invalid", async () => {
+    const response = await POST(createRequest({ email: "invalid", password: "" }));
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({
+      error: "Request validation failed.",
+      details: expect.arrayContaining([
+        expect.objectContaining({ path: "email" }),
+        expect.objectContaining({ path: "password" }),
+      ]),
+    });
+
   });
 });

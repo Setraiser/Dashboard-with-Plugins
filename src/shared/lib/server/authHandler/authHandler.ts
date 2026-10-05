@@ -1,4 +1,5 @@
-import { requiredUser } from "../../server/auth/required-user";
+import { getCurrentUser } from "../../server/auth/current-user";
+import { ApiError } from "../apiHandler/api-error";
 import { IUser } from "../../types/user";
 
 type AuthenticatedHandler<TArgs, TResult> = (
@@ -10,7 +11,11 @@ export function authHandler<TArgs, TResult>(
   handler: AuthenticatedHandler<TArgs, TResult>
 ) {
   return async (args: TArgs): Promise<TResult> => {
-    const user = await requiredUser();
+    const user = await getCurrentUser();
+
+    if (!user) {
+      throw new ApiError(401, "Authentication is required.");
+    }
 
     return handler(user, args);
   };

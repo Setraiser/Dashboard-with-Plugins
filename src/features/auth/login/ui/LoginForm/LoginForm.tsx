@@ -2,11 +2,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { LOGIN_SCHEMA, LoginFormData } from "../../model/const/loginSchema";
 import { loginRequest } from "../../server/loginRequest";
 
 export function LoginForm() {
+  const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -18,8 +20,18 @@ export function LoginForm() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
-    await loginRequest(data);
-    router.replace("/dashboard");
+    setServerError(null);
+
+    try {
+      await loginRequest(data);
+      router.replace("/dashboard");
+    } catch (error) {
+      setServerError(
+        error instanceof Error
+          ? error.message
+          : "Не удалось выполнить вход. Попробуйте ещё раз.",
+      );
+    }
   };
 
   return (
@@ -74,6 +86,12 @@ export function LoginForm() {
             </p>
           )}
         </div>
+
+        {serverError && (
+          <p role="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
 
         <button
           type="submit"

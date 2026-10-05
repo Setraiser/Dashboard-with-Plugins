@@ -1,7 +1,9 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { LoginForm } from "./login/ui/LoginForm/LoginForm";
+import { loginRequest } from "./login/server/loginRequest";
 import { RegisterForm } from "./register/ui/RegisterForm/RegisterForm";
+import { registerRequest } from "./register/server/registerRequest";
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({ replace: jest.fn() }),
@@ -15,7 +17,14 @@ jest.mock("./register/server/registerRequest", () => ({
   registerRequest: jest.fn(),
 }));
 
+const mockLoginRequest = jest.mocked(loginRequest);
+const mockRegisterRequest = jest.mocked(registerRequest);
+
 describe("authentication form validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("highlights empty login fields and explains the errors", async () => {
     render(<LoginForm />);
 
@@ -45,5 +54,49 @@ describe("authentication form validation", () => {
       "true",
     );
     expect(screen.getByLabelText("Подтвердите пароль")).toHaveClass("border-red-500");
+  });
+
+  it("shows a readable server error when login fails", async () => {
+    mockLoginRequest.mockRejectedValue(new Error("Invalid email or password."));
+
+    render(<LoginForm />);
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "user@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText("Пароль"), {
+      target: { value: "secret1" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Войти" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Invalid email or password.",
+    );
+  });
+
+  it("shows a readable server error when registration fails", async () => {
+    mockRegisterRequest.mockRejectedValue(
+      new Error("An account with this email already exists."),
+    );
+
+    render(<RegisterForm />);
+    fireEvent.change(screen.getByLabelText("Имя"), {
+      target: { value: "Иван" },
+    });
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "ivan@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText("Пароль"), {
+      target: { value: "secret1" },
+    });
+    fireEvent.change(screen.getByLabelText("Подтвердите пароль"), {
+      target: { value: "secret1" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Зарегистрироваться" }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "An account with this email already exists.",
+      );
+    });
   });
 });

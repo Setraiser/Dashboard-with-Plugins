@@ -4,7 +4,7 @@ import { getTodos } from "@/plugin-host/todo/server/requests/get";
 import { updateTodos } from "@/plugin-host/todo/server/requests/update";
 import { apiHandler } from "@/shared/lib/server/apiHandler/apiHandler";
 
-export async function GET(request: Request) {
+export async function GET() {
   return apiHandler(async () => {
     return getTodos({});
   });
@@ -15,6 +15,8 @@ export async function POST(request: Request) {
     const { text, priority } = createTodoSchema.parse(await request.json());
 
     return createTodo({ text, priority });
+  }, {
+    successStatus: 201,
   });
 }
 
