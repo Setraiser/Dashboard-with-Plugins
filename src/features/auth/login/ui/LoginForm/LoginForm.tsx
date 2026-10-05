@@ -36,12 +36,13 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Вход</h2>
+    <div className="w-full p-6 sm:p-8">
+      <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">Workspace access</p>
+      <h2 className="mb-7 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Вход</h2>
 
       <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
             Email
           </label>
           <input
@@ -53,7 +54,7 @@ export function LoginForm() {
             aria-describedby={errors.email ? "email-error" : undefined}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${errors.email
               ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
+              : "border-slate-300 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
               }`}
             placeholder="your@email.com"
           />
@@ -65,7 +66,7 @@ export function LoginForm() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
             Пароль
           </label>
           <input
@@ -77,7 +78,7 @@ export function LoginForm() {
             aria-describedby={errors.password ? "password-error" : undefined}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${errors.password
               ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
+              : "border-slate-300 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
               }`}
             placeholder="••••••••"
           />
@@ -97,7 +98,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white shadow-lg shadow-indigo-950/10 transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-300 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-indigo-900"
         >
           {isSubmitting ? 'Вход...' : 'Войти'}
         </button>
