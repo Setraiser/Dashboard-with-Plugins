@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ApiClientError } from "@/shared/lib/server/apiClient/api-client-error";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
@@ -26,11 +27,11 @@ export function RegisterForm() {
       await registerRequest(data);
       router.replace("/dashboard");
     } catch (error) {
-      setServerError(
-        error instanceof Error
-          ? error.message
-          : "Не удалось создать аккаунт. Попробуйте ещё раз.",
-      );
+      const message =
+        error instanceof ApiClientError && error.status === 409
+          ? "Аккаунт с таким email уже существует."
+          : "Не удалось создать аккаунт. Попробуйте ещё раз.";
+      setServerError(message);
     }
   };
 

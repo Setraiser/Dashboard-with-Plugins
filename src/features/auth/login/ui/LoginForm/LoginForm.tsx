@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ApiClientError } from "@/shared/lib/server/apiClient/api-client-error";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
@@ -26,11 +27,11 @@ export function LoginForm() {
       await loginRequest(data);
       router.replace("/dashboard");
     } catch (error) {
-      setServerError(
-        error instanceof Error
-          ? error.message
-          : "Не удалось выполнить вход. Попробуйте ещё раз.",
-      );
+      const message =
+        error instanceof ApiClientError && error.status === 401
+          ? "Неверный email или пароль."
+          : "Не удалось выполнить вход. Попробуйте ещё раз.";
+      setServerError(message);
     }
   };
 

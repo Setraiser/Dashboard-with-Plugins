@@ -3,10 +3,15 @@ import { render, screen } from "@testing-library/react";
 import { PluginShell } from "./plugin-shell";
 
 const mockUsePluginTabs = jest.fn();
+const mockReportOperationError = jest.fn();
 
 jest.mock("@/features/plugin-navigation", () => ({
   usePluginTabs: (...args: unknown[]) => mockUsePluginTabs(...args),
   pickActivePluginId: jest.requireActual("@/features/plugin-navigation").pickActivePluginId,
+}));
+
+jest.mock("@/app/providers/error-notifications", () => ({
+  useReportOperationError: () => mockReportOperationError,
 }));
 
 jest.mock("@/plugin-runtime", () => ({
@@ -16,8 +21,19 @@ jest.mock("@/plugin-runtime", () => ({
 }));
 
 jest.mock("@/plugin-runtime/ui", () => ({
-  PluginSlot: ({ plugin }: { plugin: { pluginId: string } }) => (
-    <div data-testid="plugin-slot">slot:{plugin.pluginId}</div>
+  PluginSlot: ({
+    plugin,
+    dependencies,
+  }: {
+    plugin: { pluginId: string };
+    dependencies: { todo: { reportOperationError?: unknown } };
+  }) => (
+    <div
+      data-testid="plugin-slot"
+      data-has-error-reporter={typeof dependencies.todo.reportOperationError === "function"}
+    >
+      slot:{plugin.pluginId}
+    </div>
   ),
 }));
 
@@ -37,6 +53,10 @@ describe("plugin shell dashboard rendering", () => {
     render(<PluginShell routePluginId="todo" />);
 
     expect(screen.getByTestId("plugin-slot")).toHaveTextContent("slot:todo");
+    expect(screen.getByTestId("plugin-slot")).toHaveAttribute(
+      "data-has-error-reporter",
+      "true",
+    );
     expect(global.fetch).not.toHaveBeenCalled();
     expect(
       screen.queryByRole("navigation", { name: "Plugin navigation" }),

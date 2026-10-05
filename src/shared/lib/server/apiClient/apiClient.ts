@@ -1,3 +1,5 @@
+import { ApiClientError } from "./api-client-error";
+
 export async function apiClient<T>(
   url: string,
   options?: RequestInit
@@ -18,22 +20,36 @@ export async function apiClient<T>(
       data = JSON.parse(responseText);
     } catch {
       if (response.ok) {
-        throw new Error("The server returned an invalid response.");
+        throw new ApiClientError(
+          response.status,
+          "The server returned an invalid response.",
+        );
       }
     }
   }
 
   if (!response.ok) {
-    const errorMessage =
+    const errorBody =
       typeof data === "object" && data !== null && "error" in data &&
       typeof data.error === "string"
-        ? data.error
+        ? data
         : typeof data === "object" && data !== null && "message" in data &&
             typeof data.message === "string"
-          ? data.message
+          ? data
+          : null;
+
+    const message =
+      errorBody && "error" in errorBody && typeof errorBody.error === "string"
+        ? errorBody.error
+        : errorBody && "message" in errorBody &&
+            typeof errorBody.message === "string"
+          ? errorBody.message
           : `Request failed with status ${response.status}.`;
 
-    throw new Error(errorMessage);
+    const details =
+      errorBody && "details" in errorBody ? errorBody.details : undefined;
+
+    throw new ApiClientError(response.status, message, details);
   }
 
   return data as T;

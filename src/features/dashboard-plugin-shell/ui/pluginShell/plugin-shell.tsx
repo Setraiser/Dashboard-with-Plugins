@@ -4,6 +4,7 @@ import {
   pickActivePluginId,
   usePluginTabs,
 } from "@/features/plugin-navigation";
+import { useReportOperationError } from "@/app/providers/error-notifications";
 import { pluginDependencies } from "@/plugin-runtime";
 import { PluginSlot } from "@/plugin-runtime/ui";
 import { useMemo } from "react";
@@ -15,6 +16,7 @@ export interface PluginShellProps {
 
 export function PluginShell({ routePluginId }: PluginShellProps) {
   const { tabs, error, isLoading } = usePluginTabs();
+  const reportOperationError = useReportOperationError();
 
   const activePluginId = useMemo(
     () => pickActivePluginId(routePluginId, tabs),
@@ -35,10 +37,17 @@ export function PluginShell({ routePluginId }: PluginShellProps) {
     instanceId: `${activePluginId}-main-1`,
     pluginId: activePluginId,
   };
+  const dependencies = {
+    ...pluginDependencies,
+    todo: {
+      ...pluginDependencies.todo,
+      reportOperationError,
+    },
+  };
 
   return (
     <main className={cls.root}>
-      <PluginSlot plugin={plugin} dependencies={pluginDependencies} />
+      <PluginSlot plugin={plugin} dependencies={dependencies} />
     </main>
   );
 }

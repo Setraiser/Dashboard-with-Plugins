@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { todoKeys } from "../const/tanstackConst";
 import {
   ITodoApi,
@@ -7,7 +8,10 @@ import {
   IUpdateTodoInput,
 } from "../types/types";
 
-export function useTodoApi(api: ITodoApi): ITodoQueryApi {
+export function useTodoApi(
+  api: ITodoApi,
+  reportOperationError: (error: unknown, fallbackMessage: string) => void,
+): ITodoQueryApi {
   const queryClient = useQueryClient();
 
   const getTodos = useQuery({
@@ -15,8 +19,19 @@ export function useTodoApi(api: ITodoApi): ITodoQueryApi {
     queryFn: api.getTodos,
   });
 
+  useEffect(() => {
+    if (getTodos.error) {
+      reportOperationError(
+        getTodos.error,
+        "Не удалось загрузить задачи. Попробуйте ещё раз.",
+      );
+    }
+  }, [getTodos.error, reportOperationError]);
+
   const createTodo = useMutation({
     mutationFn: api.createTodo,
+    onError: (error) =>
+      reportOperationError(error, "Не удалось добавить задачу. Попробуйте ещё раз."),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: todoKeys.all,
@@ -41,8 +56,9 @@ export function useTodoApi(api: ITodoApi): ITodoQueryApi {
       return { previousTodos };
     },
 
-    onError: (_error, _id, context) => {
+    onError: (error, _id, context) => {
       queryClient.setQueryData(todoKeys.all, context?.previousTodos);
+      reportOperationError(error, "Не удалось удалить задачу. Попробуйте ещё раз.");
     },
 
     onSettled: () => {
@@ -56,6 +72,8 @@ export function useTodoApi(api: ITodoApi): ITodoQueryApi {
     mutationFn: async (todosToUpdate) => {
       await api.updateTodos(todosToUpdate);
     },
+    onError: (error) =>
+      reportOperationError(error, "Не удалось сохранить изменения. Попробуйте ещё раз."),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: todoKeys.all,

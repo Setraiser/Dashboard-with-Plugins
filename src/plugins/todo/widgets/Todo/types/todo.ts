@@ -13,6 +13,7 @@ interface ITodoApi {
 
 export interface ITodoDependencies {
   todoApi: ITodoApi;
+  reportOperationError?: (error: unknown, fallbackMessage: string) => void;
 }
 
 export interface ITodoProps {
