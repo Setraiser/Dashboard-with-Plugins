@@ -19,7 +19,7 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     await loginRequest(data);
-    router.replace("/dashboard/plugins");
+    router.replace("/dashboard");
   };
 
   return (

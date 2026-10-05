@@ -8,14 +8,9 @@ export function getBreadcrumbItems(
   if (segments[0] !== "dashboard") return [];
 
   const items: BreadcrumbItem[] = [{ label: "Dashboard" }];
-  if (segments[1] !== "plugins") return items;
-
-  items[0].href = "/dashboard";
-  items.push({ label: "Plugins" });
-
-  if (segments[2]) {
-    items[1].href = "/dashboard/plugins";
-    const pluginId = segments[2];
+  if (segments[1]) {
+    items[0].href = "/dashboard";
+    const pluginId = segments[1];
     const fallbackLabel = pluginId
       .replace(/[-_]/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase());

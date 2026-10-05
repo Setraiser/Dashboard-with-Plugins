@@ -16,7 +16,7 @@ describe("PluginTabs", () => {
     const activeCard = screen.getByRole("link", {
       name: "Todo Task Manager",
     });
-    expect(activeCard).toHaveAttribute("href", "/dashboard/plugins/todo");
+    expect(activeCard).toHaveAttribute("href", "/dashboard/todo");
     expect(activeCard).toHaveAttribute("aria-current", "page");
     expect(screen.getByText("World clock")).toBeInTheDocument();
   });

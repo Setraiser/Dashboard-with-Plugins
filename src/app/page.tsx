@@ -1,7 +1,5 @@
-import { PluginShell } from "@/features/dashboard-plugin-shell";
-import { requiredUser } from "@/shared/lib/server/auth/required-user";
+import { redirect } from "next/navigation";
 
-export default async function DashboardPage() {
-  await requiredUser();
-  return <PluginShell />;
+export default function HomePage() {
+  redirect("/dashboard");
 }
