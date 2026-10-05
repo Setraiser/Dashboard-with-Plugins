@@ -12,6 +12,12 @@ export const priorityLabels = {
   [TodoPriority.High]: "Высокий",
 };
 
+export enum TodoStatus {
+  All = "all",
+  Active = "active",
+  Completed = "completed",
+}
+
 export interface ITodoItem {
   id: string;
   text: string;
