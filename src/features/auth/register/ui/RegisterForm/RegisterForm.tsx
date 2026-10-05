@@ -2,12 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { REGISTER_SCHEMA } from "../../model/const/registerSchema";
 import { RegisterFormData } from "../../model/types/registerTypes";
 import { registerRequest } from "../../server/registerRequest";
 
 export function RegisterForm() {
+  const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -18,9 +20,18 @@ export function RegisterForm() {
   const router = useRouter();
 
   const onSubmit = async (data: RegisterFormData) => {
-    await registerRequest(data);
-    router.replace("/dashboard");
+    setServerError(null);
 
+    try {
+      await registerRequest(data);
+      router.replace("/dashboard");
+    } catch (error) {
+      setServerError(
+        error instanceof Error
+          ? error.message
+          : "Не удалось создать аккаунт. Попробуйте ещё раз.",
+      );
+    }
   };
 
   return (
@@ -127,6 +138,12 @@ export function RegisterForm() {
             </p>
           )}
         </div>
+
+        {serverError && (
+          <p role="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
 
         <button
           type="submit"

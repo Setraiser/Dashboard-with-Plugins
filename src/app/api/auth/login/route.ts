@@ -1,27 +1,25 @@
-import { NextResponse } from "next/server";
-
 import { login } from "@/features/auth/login/server/login";
+import { ApiError } from "@/shared/lib/server/apiHandler/api-error";
+import { apiHandler } from "@/shared/lib/server/apiHandler/apiHandler";
+import { z } from "zod";
+
+const loginRequestSchema = z.object({
+  email: z.email(),
+  password: z.string().min(1),
+});
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.json();
+  return apiHandler(async () => {
+    const body = loginRequestSchema.parse(await request.json());
 
-    const user = await login(body);
+    try {
+      return await login(body);
+    } catch (error) {
+      if (error instanceof Error && error.message === "INVALID_CREDENTIALS") {
+        throw new ApiError(401, "Invalid email or password.");
+      }
 
-    return NextResponse.json(user);
-  } catch (error) {
-    console.error("POST /api/auth/login failed:", error);
-
-    if (error instanceof Error && error.message === "INVALID_CREDENTIALS") {
-      return NextResponse.json(
-        { message: "Invalid email or password" },
-        { status: 401 }
-      );
+      throw error;
     }
-
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
-  }
+  });
 }

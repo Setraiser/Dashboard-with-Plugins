@@ -1,5 +1,7 @@
 import { DELETE } from "./[id]/route";
 import { GET, PATCH, POST } from "./route";
+import { ApiError } from "@/shared/lib/server/apiHandler/api-error";
+import { ZodError } from "zod";
 
 function createRequest(url: string, init: RequestInit = {}) {
   const body = typeof init.body === "string" ? init.body : undefined;
@@ -18,9 +20,9 @@ const mockCreateTodo = jest.fn();
 const mockUpdateTodos = jest.fn();
 const mockDeleteTodo = jest.fn();
 
-const { requiredUser: mockRequiredUser } = jest.requireMock(
-  "@/shared/lib/server/auth/required-user"
-) as { requiredUser: jest.Mock };
+const { getCurrentUser: mockGetCurrentUser } = jest.requireMock(
+  "@/shared/lib/server/auth/current-user"
+) as { getCurrentUser: jest.Mock };
 
 const {
   createTodoSchema: mockCreateTodoSchema,
@@ -30,8 +32,8 @@ const {
   updateTodosSchema: { parse: jest.Mock };
 };
 
-jest.mock("@/shared/lib/server/auth/required-user", () => ({
-  requiredUser: jest.fn(),
+jest.mock("@/shared/lib/server/auth/current-user", () => ({
+  getCurrentUser: jest.fn(),
 }));
 
 jest.mock("@/plugin-host/todo", () => ({
@@ -41,44 +43,68 @@ jest.mock("@/plugin-host/todo", () => ({
 
 jest.mock("@/plugin-host/todo/server/requests/get", () => ({
   getTodos: async (...args: unknown[]) => {
-    await (
-      jest.requireMock("@/shared/lib/server/auth/required-user") as {
-        requiredUser: jest.Mock;
+    const user = await (
+      jest.requireMock("@/shared/lib/server/auth/current-user") as {
+        getCurrentUser: jest.Mock;
       }
-    ).requiredUser();
+    ).getCurrentUser();
+    if (!user) {
+      const { ApiError } = jest.requireActual(
+        "@/shared/lib/server/apiHandler/api-error"
+      );
+      throw new ApiError(401, "Authentication is required.");
+    }
     return mockGetTodos(...args);
   },
 }));
 
 jest.mock("@/plugin-host/todo/server/requests/create", () => ({
   createTodo: async (...args: unknown[]) => {
-    await (
-      jest.requireMock("@/shared/lib/server/auth/required-user") as {
-        requiredUser: jest.Mock;
+    const user = await (
+      jest.requireMock("@/shared/lib/server/auth/current-user") as {
+        getCurrentUser: jest.Mock;
       }
-    ).requiredUser();
+    ).getCurrentUser();
+    if (!user) {
+      const { ApiError } = jest.requireActual(
+        "@/shared/lib/server/apiHandler/api-error"
+      );
+      throw new ApiError(401, "Authentication is required.");
+    }
     return mockCreateTodo(...args);
   },
 }));
 
 jest.mock("@/plugin-host/todo/server/requests/update", () => ({
   updateTodos: async (...args: unknown[]) => {
-    await (
-      jest.requireMock("@/shared/lib/server/auth/required-user") as {
-        requiredUser: jest.Mock;
+    const user = await (
+      jest.requireMock("@/shared/lib/server/auth/current-user") as {
+        getCurrentUser: jest.Mock;
       }
-    ).requiredUser();
+    ).getCurrentUser();
+    if (!user) {
+      const { ApiError } = jest.requireActual(
+        "@/shared/lib/server/apiHandler/api-error"
+      );
+      throw new ApiError(401, "Authentication is required.");
+    }
     return mockUpdateTodos(...args);
   },
 }));
 
 jest.mock("@/plugin-host/todo/server/requests/delete", () => ({
   deleteTodo: async (...args: unknown[]) => {
-    await (
-      jest.requireMock("@/shared/lib/server/auth/required-user") as {
-        requiredUser: jest.Mock;
+    const user = await (
+      jest.requireMock("@/shared/lib/server/auth/current-user") as {
+        getCurrentUser: jest.Mock;
       }
-    ).requiredUser();
+    ).getCurrentUser();
+    if (!user) {
+      const { ApiError } = jest.requireActual(
+        "@/shared/lib/server/apiHandler/api-error"
+      );
+      throw new ApiError(401, "Authentication is required.");
+    }
     return mockDeleteTodo(...args);
   },
 }));
@@ -86,7 +112,7 @@ jest.mock("@/plugin-host/todo/server/requests/delete", () => ({
 describe("todo plugin API routes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRequiredUser.mockResolvedValue({ id: "user-1" });
+    mockGetCurrentUser.mockResolvedValue({ id: "user-1" });
   });
 
   it("accepts JSON, validates it with Zod, checks auth, calls the domain layer, and returns the todo list", async () => {
@@ -98,7 +124,7 @@ describe("todo plugin API routes", () => {
     );
 
     expect(await response.json()).toEqual(payload);
-    expect(mockRequiredUser).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockGetTodos).toHaveBeenCalledWith({});
   });
 
@@ -119,11 +145,12 @@ describe("todo plugin API routes", () => {
       text: "Write tests",
       priority: "high",
     });
-    expect(mockRequiredUser).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockCreateTodo).toHaveBeenCalledWith({
       text: "Write tests",
       priority: "high",
     });
+    expect(response.status).toBe(201);
     expect(await response.json()).toEqual(payload);
   });
 
@@ -145,7 +172,7 @@ describe("todo plugin API routes", () => {
     expect(mockUpdateTodosSchema.parse).toHaveBeenCalledWith({
       items: [{ id: "2", text: "Write tests", priority: "low" }],
     });
-    expect(mockRequiredUser).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockUpdateTodos).toHaveBeenCalledWith(parsed);
     expect(await response.json()).toEqual(payload);
   });
@@ -161,13 +188,13 @@ describe("todo plugin API routes", () => {
       { params: Promise.resolve({ id: "42" }) }
     );
 
-    expect(mockRequiredUser).toHaveBeenCalledTimes(1);
+    expect(mockGetCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockDeleteTodo).toHaveBeenCalledWith({ id: "42" });
     expect(await response.json()).toEqual(payload);
   });
 
-  it("returns a 500 response when the request is not authenticated or the service fails", async () => {
-    mockRequiredUser.mockRejectedValue(new Error("Unauthorized"));
+  it("returns a 401 response when the request is not authenticated", async () => {
+    mockGetCurrentUser.mockResolvedValue(null);
 
     const response = await POST(
       createRequest("http://localhost/api/plugins/todo", {
@@ -176,10 +203,62 @@ describe("todo plugin API routes", () => {
       })
     );
 
-    expect(mockRequiredUser).toHaveBeenCalledTimes(1);
-    expect(response.status).toBe(500);
+    expect(mockGetCurrentUser).toHaveBeenCalledTimes(1);
+    expect(response.status).toBe(401);
     expect(await response.json()).toEqual({
-      error: "Unauthorized",
+      error: "Authentication is required.",
     });
+  });
+
+  it("returns a 400 response for invalid todo input", async () => {
+    mockCreateTodoSchema.parse.mockImplementation(() => {
+      throw new ZodError([
+        {
+          code: "custom",
+          path: ["text"],
+          message: "Invalid text",
+        },
+      ]);
+    });
+
+    const response = await POST(
+      createRequest("http://localhost/api/plugins/todo", {
+        method: "POST",
+        body: JSON.stringify({ text: "", priority: "high" }),
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({
+      error: "Request validation failed.",
+      details: [expect.objectContaining({ path: "text" })],
+    });
+  });
+
+  it("returns 404 when a todo does not exist", async () => {
+    mockDeleteTodo.mockRejectedValue(new ApiError(404, "Todo not found."));
+
+    const response = await DELETE(
+      createRequest("http://localhost/api/plugins/todo/missing", {
+        method: "DELETE",
+      }),
+      { params: Promise.resolve({ id: "missing" }) },
+    );
+
+    expect(response.status).toBe(404);
+    expect(await response.json()).toEqual({ error: "Todo not found." });
+  });
+
+  it("preserves a successful no-content response from the delete handler", async () => {
+    mockDeleteTodo.mockResolvedValue(new Response(null, { status: 204 }));
+
+    const response = await DELETE(
+      createRequest("http://localhost/api/plugins/todo/42", {
+        method: "DELETE",
+      }),
+      { params: Promise.resolve({ id: "42" }) },
+    );
+
+    expect(response.status).toBe(204);
   });
 });
