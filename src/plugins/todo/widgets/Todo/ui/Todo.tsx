@@ -1,7 +1,6 @@
 "use client";
 
-import { TodoItem, TodosStore } from '@/plugins/todo/entities/todo';
-import { TodoButton, TodoInput } from '@/plugins/todo/shared/ui';
+import { TodosStore } from '@/plugins/todo/entities/todo';
 import { observer } from 'mobx-react-lite';
 import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from 'react';
@@ -9,7 +8,6 @@ import {
   ITodoItem,
   TodoPriority,
   TodoPriorityFilter,
-  TodoStatus,
   TodoStatusFilter,
   useDebounce,
   useTodoApi,
@@ -21,7 +19,11 @@ import { TodoI18nProvider } from "../../../i18n/todo-i18n-provider";
 import { getTodoErrorKey } from "../modules/functions/getTodoErrorKey";
 import { ITodoProps } from "../modules/types/todo";
 import { TodoErrorToast } from "./TodoErrorToast";
-
+import { TodoCreateForm } from "./components/TodoCreateForm";
+import { TodoFilters } from "./components/TodoFilters";
+import { TodoFooter } from "./components/TodoFooter";
+import { TodoHeader } from "./components/TodoHeader";
+import { TodoList } from "./components/TodoList";
 
 const Todos: React.FC<Omit<ITodoProps, "locale">> = ({
   pluginDependencies,
@@ -114,201 +116,37 @@ const Todos: React.FC<Omit<ITodoProps, "locale">> = ({
         />
       )}
       <section className="overflow-hidden rounded-2xl border border-todo-border bg-todo-surface text-todo-ink shadow-[0_14px_44px_rgba(15,23,42,0.12)] dark:shadow-[0_18px_50px_rgba(2,6,23,0.45)]">
-        <div
-          className="border-b border-todo-border bg-todo-surface-alt"
-          style={{ padding: "20px 20px 18px" }}
-        >
-          <div className="flex items-center justify-between gap-5">
-            <div className="min-w-0">
-              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-todo-muted leading-[1.4]">{t("tasks.eyebrow")}</p>
-              <h2 className="mt-3 text-xl font-semibold text-todo-ink leading-[1.2] sm:text-2xl">{t("tasks.title")}</h2>
-            </div>
-            <span className="inline-flex items-center rounded-full border border-todo-border bg-todo-surface px-3 py-1.5 text-[11px] font-semibold leading-none text-todo-muted ring-1 ring-inset ring-todo-border/70">
-              {t("tasks.count", { count: visibleTodos.length })}
-            </span>
-          </div>
-        </div>
+        <TodoHeader taskCount={visibleTodos.length} />
 
         <div className="space-y-6 p-5 sm:px-6 sm:py-6">
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              void addTodo(value);
-            }}
-            className="space-y-5"
-          >
-            <div className="flex items-end gap-4 pt-1">
-              <div className="min-w-0 flex-1">
-                <label htmlFor="todo-input" className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.14em] text-todo-muted leading-[1.4]">
-                  {t("fields.newTask")}
-                </label>
-                <TodoInput
-                  id="todo-input"
-                  type="text"
-                  value={value}
-                  placeholder={t("placeholders.newTask")}
-                  aria-label={t("fields.newTask")}
-                  required
-                  maxLength={500}
-                  className="min-w-0"
-                  onChange={(event) => setValue(event.target.value)}
-                />
-              </div>
-
-              <TodoButton type="submit" variant="primary" size="md" className="shrink-0" disabled={!value.trim()}>
-                {t("actions.add")}
-              </TodoButton>
-            </div>
-          </form>
-
-          <div className="space-y-3 rounded-2xl border border-todo-border bg-todo-surface-alt p-3">
-            <div className="min-w-0">
-              <label htmlFor="todo-search" className="sr-only">
-                {t("fields.search")}
-              </label>
-              <input
-                id="todo-search"
-                type="search"
-                value={searchQuery}
-                aria-label={t("fields.searchAccessible")}
-                placeholder={t("placeholders.search")}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                className="w-full rounded-xl border border-todo-border bg-todo-surface px-3 py-2 text-sm text-todo-ink placeholder:text-todo-muted focus-visible:border-todo-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-todo-ring"
-              />
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-              <div className="flex min-w-0 flex-col gap-1.5">
-                <span className="px-1 text-[10px] font-semibold uppercase tracking-wider text-todo-muted">
-                  {t("filters.status")}
-                </span>
-                <div
-                  role="group"
-                  aria-label="Filter tasks by status"
-                  className="inline-flex w-fit max-w-full rounded-xl border border-todo-border bg-todo-surface p-1"
-                >
-                  {(
-                    [
-                      [TodoStatus.All, t("filters.all")],
-                      [TodoStatus.Active, t("filters.active")],
-                      [TodoStatus.Completed, t("filters.completed")],
-                    ] as const
-                  ).map(([filter, label]) => {
-                    const isSelected = statusFilter === filter;
-
-                    return (
-                      <button
-                        key={filter}
-                        type="button"
-                        aria-pressed={isSelected}
-                        onClick={() => setStatusFilter(filter)}
-                        className={[
-                          "rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
-                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-todo-ring",
-                          isSelected
-                            ? "bg-todo-primary text-white shadow-sm"
-                            : "text-todo-muted hover:text-todo-ink",
-                        ].join(" ")}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex min-w-0 flex-col gap-1.5">
-                <span className="px-1 text-[10px] font-semibold uppercase tracking-wider text-todo-muted">
-                  {t("filters.priority")}
-                </span>
-                <div
-                  role="group"
-                  aria-label="Filter tasks by priority"
-                  className="inline-flex w-fit max-w-full rounded-xl border border-todo-border bg-todo-surface p-1"
-                >
-                  {(
-                    [
-                      [null, t("filters.all")],
-                      [TodoPriority.Low, t("priority.low")],
-                      [TodoPriority.Medium, t("priority.medium")],
-                      [TodoPriority.High, t("priority.high")],
-                    ] as const
-                  ).map(([filter, label]) => {
-                    const isSelected = priorityFilter === filter;
-
-                    return (
-                      <button
-                        key={filter ?? "all"}
-                        type="button"
-                        aria-label={
-                          filter === null
-                            ? t("filters.allPriorities")
-                            : label
-                        }
-                        aria-pressed={isSelected}
-                        onClick={() => setPriorityFilter(filter)}
-                        className={[
-                          "rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
-                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-todo-ring",
-                          isSelected
-                            ? "bg-todo-primary text-white shadow-sm"
-                            : "text-todo-muted hover:text-todo-ink",
-                        ].join(" ")}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {filteredTodos.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-todo-border bg-todo-surface-alt px-4 py-10 text-center">
-                {visibleTodos.length === 0 ? (
-                  <>
-                    <p className="text-base font-medium text-slate-700">{t("empty.title")}</p>
-                    <p className="mt-1 text-sm text-slate-500">{t("empty.description")}</p>
-                  </>
-                ) : (
-                  <p className="text-base font-medium text-slate-700">{t("empty.filtered")}</p>
-                )}
-              </div>
-            ) : (
-              <ul className="space-y-3">
-                {filteredTodos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    changeText={changeText}
-                    deleteTodo={deleteTodo}
-                    toggleCompleted={toggleCompleted}
-                    setPriority={setPriority}
-                  />
-                ))}
-              </ul>
-            )}
-          </div>
+          <TodoCreateForm
+            value={value}
+            onValueChange={setValue}
+            onSubmit={(text) => void addTodo(text)}
+          />
+          <TodoFilters
+            searchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
+            statusFilter={statusFilter}
+            onStatusFilterChange={setStatusFilter}
+            priorityFilter={priorityFilter}
+            onPriorityFilterChange={setPriorityFilter}
+          />
+          <TodoList
+            todos={filteredTodos}
+            hasUnfilteredTodos={visibleTodos.length > 0}
+            onDelete={deleteTodo}
+            onToggleCompleted={toggleCompleted}
+            onPriorityChange={setPriority}
+            onTextChange={changeText}
+          />
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-todo-border bg-todo-surface-alt px-5 py-4 sm:px-6">
-          <span className="text-sm text-todo-muted">
-            {todosStore.hasChanges
-              ? t("changes.unsaved")
-              : t("changes.saved")}
-          </span>
-          <TodoButton
-            type="button"
-            variant="primary"
-            onClick={() => void saveTodos()}
-            disabled={isSaveDisabled}
-            className="shadow-sm"
-          >
-            {t("actions.save")}
-          </TodoButton>
-        </div>
+        <TodoFooter
+          hasChanges={todosStore.hasChanges}
+          saveDisabled={isSaveDisabled}
+          onSave={() => void saveTodos()}
+        />
       </section>
     </div>
   );
