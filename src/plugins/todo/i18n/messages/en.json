@@ -25,7 +25,9 @@
     },
     "filters": {
       "status": "Status",
+      "statusGroup": "Filter tasks by status",
       "priority": "Priority",
+      "priorityGroup": "Filter tasks by priority",
       "all": "All",
       "active": "Active",
       "completed": "Completed",

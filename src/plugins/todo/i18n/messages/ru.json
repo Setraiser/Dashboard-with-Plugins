@@ -25,7 +25,9 @@
     },
     "filters": {
       "status": "Статус",
+      "statusGroup": "Фильтр задач по статусу",
       "priority": "Приоритет",
+      "priorityGroup": "Фильтр задач по приоритету",
       "all": "Все",
       "active": "Активные",
       "completed": "Выполненные",
