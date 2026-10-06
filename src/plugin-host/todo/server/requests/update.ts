@@ -36,7 +36,7 @@ export const updateTodos = authHandler(
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === "P2025"
       ) {
-        throw new ApiError(404, "One or more todos could not be found.");
+        throw new ApiError(404, "TODO_NOT_FOUND");
       }
 
       throw error;

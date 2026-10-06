@@ -4,17 +4,20 @@ import { usePluginTabs } from "@/features/plugin-navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getBreadcrumbItems } from "../model/functions/getBreadcrumbItems";
+import { useLocale, useTranslations } from "next-intl";
 
 export function Breadcrumbs() {
   const pathname = usePathname();
-  const { tabs } = usePluginTabs();
+  const locale = useLocale();
+  const t = useTranslations("navigation");
+  const { tabs } = usePluginTabs(locale);
   const pluginNames = new Map(tabs.map(({ id, displayName }) => [id, displayName]));
-  const items = getBreadcrumbItems(pathname, pluginNames);
+  const items = getBreadcrumbItems(pathname, pluginNames, t("dashboard"));
 
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav aria-label={t("breadcrumbLabel")}>
       <ol className="flex flex-wrap items-center gap-1.5 text-sm text-slate-600 sm:text-[15px] dark:text-slate-300">
         {items.map((item, index) => {
           const isCurrent = index === items.length - 1;

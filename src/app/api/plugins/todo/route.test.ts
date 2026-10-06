@@ -52,7 +52,7 @@ jest.mock("@/plugin-host/todo/server/requests/get", () => ({
       const { ApiError } = jest.requireActual(
         "@/shared/lib/server/apiHandler/api-error"
       );
-      throw new ApiError(401, "Authentication is required.");
+      throw new ApiError(401, "SESSION_EXPIRED");
     }
     return mockGetTodos(...args);
   },
@@ -69,7 +69,7 @@ jest.mock("@/plugin-host/todo/server/requests/create", () => ({
       const { ApiError } = jest.requireActual(
         "@/shared/lib/server/apiHandler/api-error"
       );
-      throw new ApiError(401, "Authentication is required.");
+      throw new ApiError(401, "SESSION_EXPIRED");
     }
     return mockCreateTodo(...args);
   },
@@ -86,7 +86,7 @@ jest.mock("@/plugin-host/todo/server/requests/update", () => ({
       const { ApiError } = jest.requireActual(
         "@/shared/lib/server/apiHandler/api-error"
       );
-      throw new ApiError(401, "Authentication is required.");
+      throw new ApiError(401, "SESSION_EXPIRED");
     }
     return mockUpdateTodos(...args);
   },
@@ -103,7 +103,7 @@ jest.mock("@/plugin-host/todo/server/requests/delete", () => ({
       const { ApiError } = jest.requireActual(
         "@/shared/lib/server/apiHandler/api-error"
       );
-      throw new ApiError(401, "Authentication is required.");
+      throw new ApiError(401, "SESSION_EXPIRED");
     }
     return mockDeleteTodo(...args);
   },
@@ -206,7 +206,7 @@ describe("todo plugin API routes", () => {
     expect(mockGetCurrentUser).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(401);
     expect(await response.json()).toEqual({
-      error: "Authentication is required.",
+      error: { code: "SESSION_EXPIRED" },
     });
   });
 
@@ -230,13 +230,17 @@ describe("todo plugin API routes", () => {
 
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({
-      error: "Request validation failed.",
-      details: [expect.objectContaining({ path: "text" })],
+      error: {
+        code: "VALIDATION_ERROR",
+        details: {
+          issues: [expect.objectContaining({ path: "text" })],
+        },
+      },
     });
   });
 
   it("returns 404 when a todo does not exist", async () => {
-    mockDeleteTodo.mockRejectedValue(new ApiError(404, "Todo not found."));
+    mockDeleteTodo.mockRejectedValue(new ApiError(404, "TODO_NOT_FOUND"));
 
     const response = await DELETE(
       createRequest("http://localhost/api/plugins/todo/missing", {
@@ -246,7 +250,9 @@ describe("todo plugin API routes", () => {
     );
 
     expect(response.status).toBe(404);
-    expect(await response.json()).toEqual({ error: "Todo not found." });
+    expect(await response.json()).toEqual({
+      error: { code: "TODO_NOT_FOUND" },
+    });
   });
 
   it("preserves a successful no-content response from the delete handler", async () => {

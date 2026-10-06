@@ -17,33 +17,39 @@ export async function apiHandler<T>(
       : Response.json(data, { status: successStatus });
   } catch (error) {
     if (error instanceof ApiError) {
-      return Response.json({ error: error.message }, { status: error.status });
+      return Response.json(
+        {
+          error: {
+            code: error.code,
+            ...(error.details !== undefined && { details: error.details }),
+          },
+        },
+        { status: error.status },
+      );
     }
 
     if (error instanceof ZodError) {
       return Response.json(
         {
-          error: "Request validation failed.",
-          details: error.issues.map(({ path, message }) => ({
-            path: path.join("."),
-            message,
-          })),
+          error: {
+            code: "VALIDATION_ERROR",
+            details: {
+              issues: error.issues.map(({ path, code }) => ({
+                path: path.join("."),
+                code,
+              })),
+            },
+          },
         },
         { status: 400 },
       );
     }
 
     if (error instanceof SyntaxError) {
-      return Response.json(
-        { error: "Request body must contain valid JSON." },
-        { status: 400 },
-      );
+      return Response.json({ error: { code: "INVALID_JSON" } }, { status: 400 });
     }
 
     console.error("API request failed:", error);
-    return Response.json(
-      { error: "An unexpected server error occurred." },
-      { status: 500 },
-    );
+    return Response.json({ error: { code: "INTERNAL_ERROR" } }, { status: 500 });
   }
 }

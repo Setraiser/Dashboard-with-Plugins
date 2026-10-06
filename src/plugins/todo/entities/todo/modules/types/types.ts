@@ -6,12 +6,6 @@ export enum TodoPriority {
   High = "high",
 }
 
-export const priorityLabels = {
-  [TodoPriority.Low]: "Низкий",
-  [TodoPriority.Medium]: "Средний",
-  [TodoPriority.High]: "Высокий",
-};
-
 export enum TodoStatus {
   All = "all",
   Active = "active",

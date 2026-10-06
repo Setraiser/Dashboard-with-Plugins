@@ -1,7 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { ApiClientError } from "@/shared/lib/server/apiClient/api-client-error";
 import { ErrorNotificationProvider } from "../ui/error-notification-provider";
 import { useReportOperationError } from "./use-report-operation-error";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 const mockReplace = jest.fn();
 
@@ -29,9 +30,9 @@ describe("useReportOperationError", () => {
   });
 
   it("redirects to login when an operation fails because the session expired", () => {
-    render(
+    renderWithIntl(
       <ErrorNotificationProvider>
-        <ReportErrorButton error={new ApiClientError(401, "Raw server text")} />
+        <ReportErrorButton error={new ApiClientError(401, "SESSION_EXPIRED")} />
       </ErrorNotificationProvider>,
     );
 
@@ -41,22 +42,35 @@ describe("useReportOperationError", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
-  it("shows the caller's safe fallback message for recoverable errors", () => {
-    render(
+  it("translates internal API error codes using the current host locale", () => {
+    renderWithIntl(
       <ErrorNotificationProvider>
         <ReportErrorButton
-          error={new ApiClientError(500, "Database credentials leaked")}
+          error={new ApiClientError(500, "INTERNAL_ERROR")}
         />
       </ErrorNotificationProvider>,
+      { locale: "ru" },
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Report error" }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Что-то пошло не так. Попробуйте ещё раз.",
+    );
+  });
+
+  it("uses a plugin-provided safe fallback for unknown codes", () => {
+    renderWithIntl(
+      <ErrorNotificationProvider>
+        <ReportErrorButton error={new ApiClientError(409, "PLUGIN_CONFLICT")} />
+      </ErrorNotificationProvider>,
+      { locale: "ru" },
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Report error" }));
 
     expect(screen.getByRole("alert")).toHaveTextContent(
       "Не удалось сохранить задачу.",
-    );
-    expect(screen.getByRole("alert")).not.toHaveTextContent(
-      "Database credentials leaked",
     );
   });
 });

@@ -4,10 +4,11 @@ import { useEffect } from "react";
 
 interface TodoErrorToastProps {
   message: string;
+  closeLabel: string;
   onDismiss: () => void;
 }
 
-export function TodoErrorToast({ message, onDismiss }: TodoErrorToastProps) {
+export function TodoErrorToast({ message, closeLabel, onDismiss }: TodoErrorToastProps) {
   useEffect(() => {
     const timeoutId = window.setTimeout(onDismiss, 4000);
     return () => window.clearTimeout(timeoutId);
@@ -29,7 +30,7 @@ export function TodoErrorToast({ message, onDismiss }: TodoErrorToastProps) {
       <p className="min-w-0 flex-1 text-sm leading-5">{message}</p>
       <button
         type="button"
-        aria-label="Закрыть уведомление"
+        aria-label={closeLabel}
         onClick={onDismiss}
         className="inline-flex size-6 shrink-0 items-center justify-center rounded-md text-lg leading-none text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:hover:bg-slate-800 dark:hover:text-white"
       >

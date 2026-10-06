@@ -14,6 +14,10 @@ const todoPlugin = {
     version: "1.0.0",
     displayName: "Todo",
     description: "Task Manager",
+    localizedMetadata: {
+      en: { description: "Task Manager" },
+      ru: { description: "Менеджер задач" },
+    },
   },
   Widget: TodoWidgetAdapter,
   dispose: () => {},

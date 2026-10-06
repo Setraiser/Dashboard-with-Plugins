@@ -1,9 +1,17 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { TodoWidgetAdapter } from "./adapter";
 import todoPlugin from "./index";
 import { TodoPriority } from "./entities/todo/modules/types/types";
+import { TodoI18nProvider } from "./i18n/todo-i18n-provider";
+
+function MissingTranslationProbe() {
+  const t = useTranslations("common");
+  const missingKey = ["missing", "key"].join(".");
+  return React.createElement("span", null, t(missingKey));
+}
 
 describe("todo plugin lifecycle", () => {
   it("exposes a dispose cleanup hook", () => {
@@ -11,7 +19,7 @@ describe("todo plugin lifecycle", () => {
     expect(() => todoPlugin.dispose?.()).not.toThrow();
   });
 
-  it("renders when the host does not provide an error reporter", () => {
+  it("renders English plugin-owned strings without an error reporter", async () => {
     const todoApi = {
       getTodos: jest.fn().mockResolvedValue([]),
       createTodo: jest.fn(),
@@ -24,19 +32,65 @@ describe("todo plugin lifecycle", () => {
       },
     });
 
-    expect(() =>
-      render(
-        React.createElement(
-          QueryClientProvider,
-          { client: queryClient },
-          React.createElement(TodoWidgetAdapter, {
-            pluginDependencies: { todoApi },
-            instanceId: "todo-instance-1",
-            config: { title: "Todo" },
-          }),
-        ),
+    render(
+      React.createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        React.createElement(TodoWidgetAdapter, {
+          pluginDependencies: { todoApi },
+          instanceId: "todo-instance-1",
+          config: { title: "Todo" },
+        }),
       ),
-    ).not.toThrow();
+    );
+
+    expect(await screen.findByRole("button", { name: "Add task" })).toBeInTheDocument();
+    expect(screen.getByText("No tasks yet.")).toBeInTheDocument();
+  });
+
+  it("renders plugin-owned Russian strings when given a generic locale", async () => {
+    const todoApi = {
+      getTodos: jest.fn().mockResolvedValue([]),
+      createTodo: jest.fn(),
+      deleteTodo: jest.fn(),
+      updateTodos: jest.fn(),
+    };
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+
+    render(
+      React.createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        React.createElement(TodoWidgetAdapter, {
+          pluginDependencies: { todoApi },
+          instanceId: "todo-instance-1",
+          locale: "ru-RU",
+        }),
+      ),
+    );
+
+    expect(await screen.findByText("Todo")).toBeInTheDocument();
+    expect(screen.getByLabelText("Поиск задач по названию")).toBeInTheDocument();
+    expect(screen.getByText("Пока нет задач.")).toBeInTheDocument();
+  });
+
+  it("uses the safe plugin fallback for unsupported locales and missing keys", () => {
+    render(
+      React.createElement(
+        TodoI18nProvider,
+        { locale: "fr" },
+        React.createElement(MissingTranslationProbe),
+      ),
+    );
+
+    expect(
+      screen.getByText("Something went wrong. Please try again."),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(["missing", "key"].join("."))).not.toBeInTheDocument();
   });
 
   it("shows a plugin-owned safe error notification when API loading fails", async () => {
@@ -65,14 +119,14 @@ describe("todo plugin lifecycle", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toHaveTextContent(
-        "Не удалось загрузить задачи. Попробуйте ещё раз.",
+        "Could not load tasks. Please try again.",
       );
     });
     expect(screen.getByRole("alert")).not.toHaveTextContent(
       "Database connection failed",
     );
     expect(
-      screen.getByRole("button", { name: "Закрыть уведомление" }),
+      screen.getByRole("button", { name: "Dismiss notification" }),
     ).toBeInTheDocument();
   });
 
@@ -104,10 +158,44 @@ describe("todo plugin lifecycle", () => {
     await waitFor(() => {
       expect(reportOperationError).toHaveBeenCalledWith(
         expect.any(Error),
-        "Не удалось загрузить задачи. Попробуйте ещё раз.",
+        "Could not load tasks. Please try again.",
       );
     });
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("translates Todo API error codes inside the plugin", async () => {
+    const todoNotFoundError = Object.assign(new Error("TODO_NOT_FOUND"), {
+      code: "TODO_NOT_FOUND",
+    });
+    const todoApi = {
+      getTodos: jest.fn().mockRejectedValue(todoNotFoundError),
+      createTodo: jest.fn(),
+      deleteTodo: jest.fn(),
+      updateTodos: jest.fn(),
+    };
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+
+    render(
+      React.createElement(
+        QueryClientProvider,
+        { client: queryClient },
+        React.createElement(TodoWidgetAdapter, {
+          pluginDependencies: { todoApi },
+          instanceId: "todo-instance-1",
+          locale: "ru",
+        }),
+      ),
+    );
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Эта задача больше не существует.",
+    );
+    expect(screen.getByRole("alert")).not.toHaveTextContent("TODO_NOT_FOUND");
   });
 
   it("filters tasks by active and completed status", async () => {
@@ -212,7 +300,7 @@ describe("todo plugin lifecycle", () => {
     expect(screen.getByLabelText("Task name for High completed task")).toBeInTheDocument();
     expect(screen.getByLabelText("Task name for Low active task")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Высокий" }));
+    fireEvent.click(screen.getByRole("button", { name: "High" }));
 
     await waitFor(() => {
       expect(screen.getByLabelText("Task name for High active task")).toBeInTheDocument();

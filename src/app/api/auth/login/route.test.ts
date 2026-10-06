@@ -42,7 +42,7 @@ describe("auth login endpoint", () => {
 
     expect(response.status).toBe(401);
     expect(await response.json()).toEqual({
-      error: "Invalid email or password.",
+      error: { code: "INVALID_CREDENTIALS" },
     });
   });
 
@@ -55,7 +55,7 @@ describe("auth login endpoint", () => {
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({
-      error: "An unexpected server error occurred.",
+      error: { code: "INTERNAL_ERROR" },
     });
   });
 
@@ -68,7 +68,7 @@ describe("auth login endpoint", () => {
 
     expect(response.status).toBe(400);
     expect(await response.json()).toEqual({
-      error: "Request body must contain valid JSON.",
+      error: { code: "INVALID_JSON" },
     });
   });
 
@@ -77,11 +77,15 @@ describe("auth login endpoint", () => {
 
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({
-      error: "Request validation failed.",
-      details: expect.arrayContaining([
-        expect.objectContaining({ path: "email" }),
-        expect.objectContaining({ path: "password" }),
-      ]),
+      error: {
+        code: "VALIDATION_ERROR",
+        details: {
+          issues: expect.arrayContaining([
+            expect.objectContaining({ path: "email" }),
+            expect.objectContaining({ path: "password" }),
+          ]),
+        },
+      },
     });
 
   });

@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         (error instanceof Error && error.message === "USER_ALREADY_EXISTS") ||
         isUniqueConstraintError(error)
       ) {
-        throw new ApiError(409, "An account with this email already exists.");
+        throw new ApiError(409, "EMAIL_ALREADY_EXISTS");
       }
 
       throw error;

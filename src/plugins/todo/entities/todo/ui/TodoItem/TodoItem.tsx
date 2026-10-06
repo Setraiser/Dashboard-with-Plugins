@@ -3,7 +3,8 @@
 
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { ITodoItemProps, priorityLabels, TodoPriority } from '../../modules/types/types';
+import { ITodoItemProps, TodoPriority } from '../../modules/types/types';
+import { useTranslations } from "next-intl";
 
 const priorityDotClassNames: Record<TodoPriority, string> = {
   [TodoPriority.Low]: "bg-slate-500 ring-slate-200 dark:bg-slate-400 dark:ring-slate-700",
@@ -11,9 +12,15 @@ const priorityDotClassNames: Record<TodoPriority, string> = {
   [TodoPriority.High]: "bg-rose-500 ring-rose-200 dark:bg-rose-400 dark:ring-rose-800",
 };
 
-function TodoPriorityBadge({ priority }: { priority: TodoPriority }) {
+function TodoPriorityBadge({
+  priority,
+  label,
+}: {
+  priority: TodoPriority;
+  label: string;
+}) {
   return (
-    <span className="inline-flex items-center justify-center" aria-label={priorityLabels[priority]}>
+    <span className="inline-flex items-center justify-center" aria-label={label}>
       <span
         aria-hidden="true"
         className={[
@@ -21,13 +28,14 @@ function TodoPriorityBadge({ priority }: { priority: TodoPriority }) {
           priorityDotClassNames[priority],
         ].join(" ")}
       />
-      <span className="sr-only">{priorityLabels[priority]}</span>
+      <span className="sr-only">{label}</span>
     </span>
   );
 }
 
 const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
   const { deleteTodo, setPriority, todo, toggleCompleted, changeText } = props;
+  const t = useTranslations("common");
 
   return (
     <li
@@ -41,7 +49,10 @@ const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
           <input
             type="checkbox"
             checked={todo.completed}
-            aria-label={`Mark ${todo.text} as complete`}
+            aria-label={t(
+              todo.completed ? "fields.markIncomplete" : "fields.markComplete",
+              { task: todo.text },
+            )}
             onChange={() => toggleCompleted(todo)}
             className="h-4 w-4 rounded border border-todo-border text-todo-primary accent-todo-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-todo-ring"
           />
@@ -50,7 +61,7 @@ const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
         <input
           type="text"
           value={todo.text}
-          aria-label={`Task name for ${todo.text}`}
+          aria-label={t("fields.taskName", { task: todo.text })}
           onChange={(event) => changeText(todo.id, event.target.value)}
           className={[
             "w-full min-w-0 rounded-xl border bg-transparent px-2.5 py-2 text-sm shadow-sm transition-all duration-200",
@@ -62,17 +73,20 @@ const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
 
       <div className="flex items-center gap-2 pt-0.5 sm:justify-end sm:pt-0">
         <label className="flex items-center gap-2.5 rounded-xl border border-todo-border bg-todo-surface-alt px-2.5 py-2 text-xs text-todo-muted shadow-sm">
-          <span className="sr-only">Priority</span>
-          <TodoPriorityBadge priority={todo.priority} />
+          <span className="sr-only">{t("filters.priority")}</span>
+          <TodoPriorityBadge
+            priority={todo.priority}
+            label={t(`priority.${todo.priority}`)}
+          />
           <select
             value={todo.priority}
-            aria-label="Task priority"
+            aria-label={t("fields.priority")}
             onChange={(event) => setPriority(todo.id, event.target.value as TodoPriority)}
             className="appearance-none bg-transparent pr-1 text-sm font-medium text-todo-ink outline-none"
           >
-            <option value={TodoPriority.Low}>{priorityLabels[TodoPriority.Low]}</option>
-            <option value={TodoPriority.Medium}>{priorityLabels[TodoPriority.Medium]}</option>
-            <option value={TodoPriority.High}>{priorityLabels[TodoPriority.High]}</option>
+            <option value={TodoPriority.Low}>{t("priority.low")}</option>
+            <option value={TodoPriority.Medium}>{t("priority.medium")}</option>
+            <option value={TodoPriority.High}>{t("priority.high")}</option>
           </select>
         </label>
 
@@ -81,7 +95,7 @@ const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
           onClick={() => deleteTodo(todo.id)}
           className="inline-flex items-center justify-center rounded-xl border border-todo-border bg-todo-surface-alt px-3 py-2 text-sm font-medium text-todo-muted transition-colors duration-200 hover:border-todo-border-strong hover:bg-todo-surface hover:text-todo-ink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-todo-ring"
         >
-          Delete
+          {t("actions.delete")}
         </button>
       </div>
     </li>
@@ -89,4 +103,3 @@ const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
 });
 
 export default TodoItem;
-

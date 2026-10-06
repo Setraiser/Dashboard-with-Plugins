@@ -11,6 +11,10 @@ export interface PluginManifest {
   version: string;
   displayName: string;
   description: string;
+  localizedMetadata?: Record<
+    string,
+    Partial<Pick<PluginManifest, "description">>
+  >;
 
   configSchema?: PluginConfigSchema;
 }
@@ -19,6 +23,7 @@ export interface PluginWidgetProps {
   instanceId: string;
   config: unknown;
   pluginDependencies: Record<string, unknown>;
+  locale?: string;
 }
 
 export interface PluginLifecycle {

@@ -14,7 +14,7 @@ export function authHandler<TArgs, TResult>(
     const user = await getCurrentUser();
 
     if (!user) {
-      throw new ApiError(401, "Authentication is required.");
+      throw new ApiError(401, "SESSION_EXPIRED");
     }
 
     return handler(user, args);

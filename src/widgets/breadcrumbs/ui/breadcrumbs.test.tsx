@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { Breadcrumbs } from "./breadcrumbs";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 const mockUsePathname = jest.fn();
 const mockUsePluginTabs = jest.fn();
@@ -22,7 +23,7 @@ describe("Breadcrumbs", () => {
   it("shows the dashboard and active plugin hierarchy", () => {
     mockUsePathname.mockReturnValue("/dashboard/todo");
 
-    render(<Breadcrumbs />);
+    renderWithIntl(<Breadcrumbs />);
 
     expect(screen.getByRole("navigation", { name: "Breadcrumb" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Dashboard" })).toHaveAttribute(
@@ -36,7 +37,7 @@ describe("Breadcrumbs", () => {
   it("marks dashboard as the current page on the dashboard route", () => {
     mockUsePathname.mockReturnValue("/dashboard");
 
-    render(<Breadcrumbs />);
+    renderWithIntl(<Breadcrumbs />);
 
     expect(screen.getByText("Dashboard")).toHaveAttribute("aria-current", "page");
     expect(screen.queryByRole("link", { name: "Dashboard" })).not.toBeInTheDocument();

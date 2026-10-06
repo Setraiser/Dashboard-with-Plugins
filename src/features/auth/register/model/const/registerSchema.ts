@@ -4,19 +4,19 @@ export const REGISTER_SCHEMA = z
   .object({
     name: z
       .string()
-      .min(1, "Введите имя")
-      .min(2, "Имя должно содержать минимум 2 символа"),
+      .min(1, "auth.validation.nameRequired")
+      .min(2, "auth.validation.nameTooShort"),
     email: z
       .string()
-      .min(1, "Введите email")
-      .pipe(z.email("Введите корректный email")),
+      .min(1, "auth.validation.emailRequired")
+      .pipe(z.email("auth.validation.emailInvalid")),
     password: z
       .string()
-      .min(1, "Введите пароль")
-      .min(6, "Пароль должен содержать минимум 6 символов"),
-    confirmPassword: z.string().min(1, "Подтвердите пароль"),
+      .min(1, "auth.validation.passwordRequired")
+      .min(6, "auth.validation.passwordTooShort"),
+    confirmPassword: z.string().min(1, "auth.validation.confirmPasswordRequired"),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Пароли не совпадают",
+    message: "auth.validation.passwordMismatch",
     path: ["confirmPassword"],
   });

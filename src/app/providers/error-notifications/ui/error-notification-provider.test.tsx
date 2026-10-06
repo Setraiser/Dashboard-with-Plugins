@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/renderWithIntl";
 import {
   ErrorNotificationProvider,
   useErrorNotification,
@@ -20,10 +21,11 @@ describe("ErrorNotificationProvider", () => {
   });
 
   it("shows an accessible notification and lets the user dismiss it", () => {
-    render(
+    renderWithIntl(
       <ErrorNotificationProvider>
         <TriggerNotification />
       </ErrorNotificationProvider>,
+      { locale: "ru" },
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Trigger error" }));
@@ -39,10 +41,11 @@ describe("ErrorNotificationProvider", () => {
   it("automatically dismisses notifications after four seconds", () => {
     jest.useFakeTimers();
 
-    render(
+    renderWithIntl(
       <ErrorNotificationProvider>
         <TriggerNotification />
       </ErrorNotificationProvider>,
+      { locale: "ru" },
     );
     fireEvent.click(screen.getByRole("button", { name: "Trigger error" }));
 

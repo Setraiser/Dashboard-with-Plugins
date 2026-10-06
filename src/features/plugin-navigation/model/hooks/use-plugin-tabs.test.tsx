@@ -71,6 +71,50 @@ describe("plugin navigation dashboard wiring", () => {
     expect(result.current.error).toBeNull();
   });
 
+  it("uses plugin-owned metadata for the requested locale", async () => {
+    mockGetRegisteredPluginIds.mockReturnValue(["todo"]);
+    mockLoadPlugin.mockResolvedValue({
+      manifest: {
+        id: "todo",
+        displayName: "Todo",
+        description: "Task Manager",
+        localizedMetadata: {
+          ru: { description: "Менеджер задач" },
+        },
+      },
+    });
+
+    const { result } = renderHook(() => usePluginTabs("ru"));
+
+    await waitFor(() => {
+      expect(result.current.tabs).toEqual([
+        { id: "todo", displayName: "Todo", description: "Менеджер задач" },
+      ]);
+    });
+  });
+
+  it("uses base-language metadata when the locale includes a region", async () => {
+    mockGetRegisteredPluginIds.mockReturnValue(["todo"]);
+    mockLoadPlugin.mockResolvedValue({
+      manifest: {
+        id: "todo",
+        displayName: "Todo",
+        description: "Task Manager",
+        localizedMetadata: {
+          ru: { description: "Менеджер задач" },
+        },
+      },
+    });
+
+    const { result } = renderHook(() => usePluginTabs("ru-RU"));
+
+    await waitFor(() => {
+      expect(result.current.tabs).toEqual([
+        { id: "todo", displayName: "Todo", description: "Менеджер задач" },
+      ]);
+    });
+  });
+
   it("drops all failed plugin loads without turning them into a fatal dashboard error", async () => {
     mockGetRegisteredPluginIds.mockReturnValue(["todo"]);
     mockLoadPlugin.mockRejectedValue(new Error("Failed to load plugin"));

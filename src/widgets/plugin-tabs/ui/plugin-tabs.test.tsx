@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { PluginTabs } from "./plugin-tabs";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("PluginTabs", () => {
   it("renders plugin cards with their titles, descriptions, and active state", () => {
-    render(
+    renderWithIntl(
       <PluginTabs
         items={[
           { id: "todo", displayName: "Todo", description: "Task Manager" },
@@ -22,7 +23,7 @@ describe("PluginTabs", () => {
   });
 
   it("renders nothing when there are no plugins", () => {
-    const { container } = render(
+    const { container } = renderWithIntl(
       <PluginTabs items={[]} activePluginId={null} />,
     );
 

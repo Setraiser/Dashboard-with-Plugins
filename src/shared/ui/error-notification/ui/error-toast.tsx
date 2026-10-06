@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 interface ErrorToastProps {
   message: string;
@@ -8,6 +9,7 @@ interface ErrorToastProps {
 }
 
 export function ErrorToast({ message, onDismiss }: ErrorToastProps) {
+  const t = useTranslations("common");
   useEffect(() => {
     const timeoutId = window.setTimeout(onDismiss, 4000);
     return () => window.clearTimeout(timeoutId);
@@ -29,7 +31,7 @@ export function ErrorToast({ message, onDismiss }: ErrorToastProps) {
       <p className="min-w-0 flex-1 text-sm leading-5">{message}</p>
       <button
         type="button"
-        aria-label="Закрыть уведомление"
+        aria-label={t("closeNotification")}
         onClick={onDismiss}
         className="inline-flex size-6 shrink-0 items-center justify-center rounded-md text-lg leading-none text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:hover:bg-slate-800 dark:hover:text-white"
       >

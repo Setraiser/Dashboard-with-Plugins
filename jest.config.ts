@@ -10,6 +10,7 @@ const config: Config = {
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "^next-intl$": "<rootDir>/src/test/next-intl-mock.tsx",
   },
 };
 

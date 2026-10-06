@@ -2,13 +2,15 @@
 
 import { combineClassNames } from "@/shared/lib/utils/combineClassNames/combine-class-names";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { PluginTabsProps } from "./types";
 
 export function PluginTabs({ items, activePluginId }: PluginTabsProps) {
+  const t = useTranslations("navigation");
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="Plugin navigation">
+    <nav aria-label={t("pluginNavigationLabel")}>
       <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => {
           const isActive = item.id === activePluginId;
