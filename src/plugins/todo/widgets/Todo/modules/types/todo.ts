@@ -2,7 +2,7 @@ import {
   ICreateTodoInput,
   ITodoItem,
   IUpdateTodoInput,
-} from "../../../entities/todo/modules/types/types";
+} from "../../../../entities/todo/modules/types/types";
 
 interface ITodoApi {
   getTodos(): Promise<ITodoItem[]>;
@@ -19,5 +19,6 @@ export interface ITodoDependencies {
 export interface ITodoProps {
   instanceId?: string;
   config?: unknown;
+  locale?: string;
   pluginDependencies: ITodoDependencies;
 }

@@ -22,34 +22,41 @@ export async function apiClient<T>(
       if (response.ok) {
         throw new ApiClientError(
           response.status,
-          "The server returned an invalid response.",
+          "INVALID_RESPONSE",
         );
       }
     }
   }
 
   if (!response.ok) {
+    const errorValue =
+      typeof data === "object" && data !== null && "error" in data
+        ? data.error
+        : null;
     const errorBody =
-      typeof data === "object" && data !== null && "error" in data &&
-      typeof data.error === "string"
-        ? data
-        : typeof data === "object" && data !== null && "message" in data &&
-            typeof data.message === "string"
-          ? data
-          : null;
-
-    const message =
-      errorBody && "error" in errorBody && typeof errorBody.error === "string"
-        ? errorBody.error
-        : errorBody && "message" in errorBody &&
-            typeof errorBody.message === "string"
-          ? errorBody.message
-          : `Request failed with status ${response.status}.`;
-
+      typeof errorValue === "object" && errorValue !== null
+        ? errorValue
+        : null;
+    const code =
+      errorBody &&
+      "code" in errorBody &&
+      typeof errorBody.code === "string"
+        ? errorBody.code
+        : response.status === 401
+          ? "SESSION_EXPIRED"
+          : response.status === 403
+            ? "FORBIDDEN"
+            : response.status === 400 || response.status === 422
+              ? "VALIDATION_ERROR"
+              : response.status === 404
+                ? "NOT_FOUND"
+                : response.status === 409
+                  ? "CONFLICT"
+                  : "INTERNAL_ERROR";
     const details =
       errorBody && "details" in errorBody ? errorBody.details : undefined;
 
-    throw new ApiClientError(response.status, message, details);
+    throw new ApiClientError(response.status, code, details);
   }
 
   return data as T;

@@ -10,13 +10,16 @@ import { PluginSlot } from "@/plugin-runtime/ui";
 import { LoadingState } from "@/shared/ui/loading-state";
 import { useMemo } from "react";
 import cls from "./plugin-shell.module.scss";
+import { useLocale, useTranslations } from "next-intl";
 
 export interface PluginShellProps {
   routePluginId?: string;
 }
 
 export function PluginShell({ routePluginId }: PluginShellProps) {
-  const { tabs, error, isLoading } = usePluginTabs();
+  const locale = useLocale();
+  const t = useTranslations("runtime");
+  const { tabs, error, isLoading } = usePluginTabs(locale);
   const reportOperationError = useReportOperationError();
 
   const activePluginId = useMemo(
@@ -24,12 +27,12 @@ export function PluginShell({ routePluginId }: PluginShellProps) {
     [routePluginId, tabs],
   );
 
-  if (error) return <div role="alert">{error}</div>;
-  if (isLoading) return <LoadingState label="Loading plugins..." />;
+  if (error) return <div role="alert">{t("navigationFailed")}</div>;
+  if (isLoading) return <LoadingState label={t("loadingPlugins")} />;
   if (!activePluginId) {
     return (
       <main className={cls.root}>
-        <div role="alert">Plugin route was not found.</div>
+        <div role="alert">{t("pluginNotFound")}</div>
       </main>
     );
   }
@@ -48,7 +51,14 @@ export function PluginShell({ routePluginId }: PluginShellProps) {
 
   return (
     <main className={cls.root}>
-      <PluginSlot plugin={plugin} dependencies={dependencies} />
+      <PluginSlot
+        plugin={plugin}
+        dependencies={dependencies}
+        locale={locale}
+        loadingLabel={t("loadingPlugin")}
+        errorLabel={t("applicationError")}
+        pluginErrorLabel={t("pluginFailed")}
+      />
     </main>
   );
 }

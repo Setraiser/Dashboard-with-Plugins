@@ -2,12 +2,13 @@ import { BreadcrumbItem } from "../types/breadcrumbs";
 
 export function getBreadcrumbItems(
   pathname: string,
-  pluginNames: Map<string, string>
+  pluginNames: Map<string, string>,
+  dashboardLabel = "Dashboard",
 ): BreadcrumbItem[] {
   const segments = pathname.split("/").filter(Boolean);
   if (segments[0] !== "dashboard") return [];
 
-  const items: BreadcrumbItem[] = [{ label: "Dashboard" }];
+  const items: BreadcrumbItem[] = [{ label: dashboardLabel }];
   if (segments[1]) {
     items[0].href = "/dashboard";
     const pluginId = segments[1];

@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
 import { PluginShell } from "./plugin-shell";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 const mockUsePluginTabs = jest.fn();
 const mockReportOperationError = jest.fn();
@@ -50,7 +51,7 @@ describe("plugin shell dashboard rendering", () => {
       isLoading: false,
     });
 
-    render(<PluginShell routePluginId="todo" />);
+    renderWithIntl(<PluginShell routePluginId="todo" />);
 
     expect(screen.getByTestId("plugin-slot")).toHaveTextContent("slot:todo");
     expect(screen.getByTestId("plugin-slot")).toHaveAttribute(
@@ -70,7 +71,7 @@ describe("plugin shell dashboard rendering", () => {
       isLoading: false,
     });
 
-    render(<PluginShell routePluginId="missing" />);
+    renderWithIntl(<PluginShell routePluginId="missing" />);
 
     expect(screen.getByRole("alert")).toHaveTextContent("Plugin route was not found.");
   });
@@ -82,7 +83,7 @@ describe("plugin shell dashboard rendering", () => {
       isLoading: true,
     });
 
-    render(<PluginShell routePluginId="todo" />);
+    renderWithIntl(<PluginShell routePluginId="todo" />);
 
     expect(screen.getByRole("status")).toHaveTextContent("Loading plugins...");
     expect(screen.getByRole("status")).toHaveAttribute("aria-busy", "true");

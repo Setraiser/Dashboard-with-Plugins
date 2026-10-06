@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       return await login(body);
     } catch (error) {
       if (error instanceof Error && error.message === "INVALID_CREDENTIALS") {
-        throw new ApiError(401, "Invalid email or password.");
+        throw new ApiError(401, "INVALID_CREDENTIALS");
       }
 
       throw error;

@@ -21,20 +21,30 @@ function isFulfilled<T>(
 }
 
 async function loadPluginTabs(
-  signal: AbortSignal
+  signal: AbortSignal,
+  locale: string,
 ): Promise<PluginTabItem[] | null> {
   initDefaultRegistry();
   const ids = getRegisteredPluginIds();
   const modules = await Promise.allSettled(ids.map((id) => loadPlugin(id)));
   if (signal.aborted) return null;
-  return modules.filter(isFulfilled).map(({ value }) => ({
-    id: value.manifest.id,
-    displayName: value.manifest.displayName,
-    description: value.manifest.description,
-  }));
+  return modules.filter(isFulfilled).map(({ value }) => {
+    const normalizedLocale = locale.toLowerCase();
+    const localizedMetadata =
+      value.manifest.localizedMetadata?.[locale] ??
+      value.manifest.localizedMetadata?.[normalizedLocale] ??
+      value.manifest.localizedMetadata?.[normalizedLocale.split("-")[0]];
+
+    return {
+      id: value.manifest.id,
+      displayName: value.manifest.displayName,
+      description:
+        localizedMetadata?.description ?? value.manifest.description,
+    };
+  });
 }
 
-export function usePluginTabs() {
+export function usePluginTabs(locale = "en") {
   const [tabs, setTabs] = useState<PluginTabItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +53,7 @@ export function usePluginTabs() {
     const controller = new AbortController();
     const { signal } = controller;
 
-    loadPluginTabs(signal)
+    loadPluginTabs(signal, locale)
       .then((items) => {
         if (items === null) return;
         setTabs(items);
@@ -58,7 +68,7 @@ export function usePluginTabs() {
       });
 
     return () => controller.abort();
-  }, []);
+  }, [locale]);
 
   return { tabs, error, isLoading };
 }

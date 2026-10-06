@@ -1,8 +1,10 @@
 import { MainPluginShell } from "@/features/dashboard-plugin-shell";
 import { requiredUser } from "@/shared/lib/server/auth/required-user";
+import { getTranslations } from "next-intl/server";
 
 export default async function DashboardPage() {
   await requiredUser();
+  const t = await getTranslations("dashboard");
 
   return (
     <main className="w-full">
@@ -10,13 +12,13 @@ export default async function DashboardPage() {
         <div aria-hidden="true" className="absolute -right-20 -top-28 -z-10 h-72 w-72 rounded-full bg-indigo-300/25 blur-3xl dark:bg-indigo-500/15" />
         <div aria-hidden="true" className="absolute -bottom-32 -left-16 -z-10 h-64 w-64 rounded-full bg-teal-200/35 blur-3xl dark:bg-teal-500/10" />
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-indigo-600 dark:text-indigo-300">
-          Your creative workspace
+          {t("eyebrow")}
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-5xl dark:text-white">
-          Plugin Dashboard
+          {t("title")}
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">
-          Explore and open the tools available in your workspace.
+          {t("description")}
         </p>
       </header>
       <MainPluginShell />

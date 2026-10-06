@@ -8,29 +8,32 @@ describe("apiClient", () => {
     global.fetch = mockFetch;
   });
 
-  it("throws the API error message from the unified error contract", async () => {
+  it("throws the stable API error code from the structured error contract", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 409,
       text: async () =>
-        JSON.stringify({ error: "An account with this email already exists." }),
+        JSON.stringify({ error: { code: "EMAIL_ALREADY_EXISTS" } }),
     });
 
-    await expect(apiClient("/api/auth/register")).rejects.toThrow(
-      "An account with this email already exists.",
-    );
+    await expect(apiClient("/api/auth/register")).rejects.toMatchObject({
+      status: 409,
+      code: "EMAIL_ALREADY_EXISTS",
+    });
   });
 
-  it("supports legacy message fields while callers transition to the error contract", async () => {
+  it("maps responses without a code to a safe code using the HTTP status", async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 401,
-      text: async () => JSON.stringify({ message: "Sign in is required." }),
+      text: async () => JSON.stringify({ error: { details: { field: "email" } } }),
     });
 
-    await expect(apiClient("/api/plugins/todo")).rejects.toThrow(
-      "Sign in is required.",
-    );
+    await expect(apiClient("/api/plugins/todo")).rejects.toMatchObject({
+      status: 401,
+      code: "SESSION_EXPIRED",
+      details: { field: "email" },
+    });
   });
 
   it("returns undefined for a successful no-content response", async () => {

@@ -23,7 +23,7 @@ export function useTodoApi(
     if (getTodos.error) {
       reportOperationError(
         getTodos.error,
-        "Не удалось загрузить задачи. Попробуйте ещё раз.",
+        "errors.load",
       );
     }
   }, [getTodos.error, reportOperationError]);
@@ -31,7 +31,7 @@ export function useTodoApi(
   const createTodo = useMutation({
     mutationFn: api.createTodo,
     onError: (error) =>
-      reportOperationError(error, "Не удалось добавить задачу. Попробуйте ещё раз."),
+      reportOperationError(error, "errors.create"),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: todoKeys.all,
@@ -58,7 +58,7 @@ export function useTodoApi(
 
     onError: (error, _id, context) => {
       queryClient.setQueryData(todoKeys.all, context?.previousTodos);
-      reportOperationError(error, "Не удалось удалить задачу. Попробуйте ещё раз.");
+      reportOperationError(error, "errors.delete");
     },
 
     onSettled: () => {
@@ -73,7 +73,7 @@ export function useTodoApi(
       await api.updateTodos(todosToUpdate);
     },
     onError: (error) =>
-      reportOperationError(error, "Не удалось сохранить изменения. Попробуйте ещё раз."),
+      reportOperationError(error, "errors.save"),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: todoKeys.all,

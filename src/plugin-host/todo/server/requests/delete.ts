@@ -15,7 +15,7 @@ export const deleteTodo = authHandler(async (user, { id }: IDeleteTodo) => {
   });
 
   if (result.count === 0) {
-    throw new ApiError(404, "Todo not found.");
+    throw new ApiError(404, "TODO_NOT_FOUND");
   }
 
   return new Response(null, { status: 204 });

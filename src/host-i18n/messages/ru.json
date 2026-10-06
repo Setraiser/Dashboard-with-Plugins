@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "title": "Панель плагинов",
+    "description": "Удобное пространство для полезных инструментов."
+  },
+  "dashboard": {
+    "eyebrow": "Ваше рабочее пространство",
+    "title": "Панель плагинов",
+    "description": "Изучайте доступные инструменты и открывайте нужные."
+  },
+  "pluginCatalog": {
+    "eyebrow": "Начните работу",
+    "title": "Ваши плагины",
+    "description": "Выберите инструмент, чтобы продолжить"
+  },
+  "navigation": {
+    "dashboard": "Главная",
+    "breadcrumbLabel": "Навигационная цепочка",
+    "pluginNavigationLabel": "Навигация по плагинам"
+  },
+  "common": {
+    "logout": "Выйти",
+    "languageSwitcher": "Язык",
+    "switchToEnglish": "Переключить язык на английский",
+    "switchToRussian": "Переключить язык на русский",
+    "closeNotification": "Закрыть уведомление",
+    "retry": "Попробовать снова"
+  },
+  "auth": {
+    "login": "Вход",
+    "register": "Создать аккаунт",
+    "loginEyebrow": "Вход в рабочее пространство",
+    "registerEyebrow": "Создайте своё пространство",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "namePlaceholder": "Ваше имя",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "Введите пароль",
+    "confirmPasswordPlaceholder": "Повторите пароль",
+    "loginSubmit": "Войти",
+    "loginSubmitting": "Входим...",
+    "registerSubmit": "Создать аккаунт",
+    "registerSubmitting": "Создаём аккаунт...",
+    "errors": {
+      "invalidCredentials": "Неверный адрес электронной почты или пароль.",
+      "emailAlreadyExists": "Аккаунт с такой электронной почтой уже существует.",
+      "loginFailed": "Не удалось войти. Попробуйте ещё раз.",
+      "registerFailed": "Не удалось создать аккаунт. Попробуйте ещё раз."
+    },
+    "validation": {
+      "nameRequired": "Введите имя.",
+      "nameTooShort": "Имя должно содержать не менее 2 символов.",
+      "emailRequired": "Введите адрес электронной почты.",
+      "emailInvalid": "Введите корректный адрес электронной почты.",
+      "passwordRequired": "Введите пароль.",
+      "passwordTooShort": "Пароль должен содержать не менее 6 символов.",
+      "confirmPasswordRequired": "Подтвердите пароль.",
+      "passwordMismatch": "Пароли не совпадают."
+    }
+  },
+  "runtime": {
+    "loadingPlugins": "Загружаем плагины...",
+    "loadingPlugin": "Загружаем плагин...",
+    "navigationFailed": "Не удалось загрузить навигацию плагинов.",
+    "pluginNotFound": "Страница плагина не найдена.",
+    "pluginFailed": "Не удалось отобразить этот плагин.",
+    "applicationError": "Что-то пошло не так.",
+    "retry": "Попробовать снова"
+  },
+  "errors": {
+    "sessionExpired": "Срок действия сеанса истёк. Войдите в систему снова.",
+    "forbidden": "У вас нет прав для выполнения этого действия.",
+    "validation": "Проверьте введённые данные и попробуйте снова.",
+    "notFound": "Не удалось найти запрошенный объект.",
+    "conflict": "Действие конфликтует с текущим состоянием.",
+    "unexpected": "Что-то пошло не так. Попробуйте ещё раз."
+  }
+}

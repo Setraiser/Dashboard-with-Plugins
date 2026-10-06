@@ -1,11 +1,13 @@
 "use client"
 // AuthWidget.tsx
 import { LoginForm, RegisterForm } from "@/features/auth";
+import { useTranslations } from "next-intl";
 import { useState } from 'react';
 import { AuthMode } from "../model/types/auth";
 
 export function AuthWidget() {
   const [mode, setMode] = useState<AuthMode>('login');
+  const t = useTranslations("auth");
 
   return (
     <div className="mx-auto w-full max-w-md overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-2xl shadow-indigo-950/10 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/75">
@@ -19,7 +21,7 @@ export function AuthWidget() {
             : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
             }`}
         >
-          Вход
+          {t("login")}
         </button>
         <button
           type="button"
@@ -29,7 +31,7 @@ export function AuthWidget() {
             : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
             }`}
         >
-          Регистрация
+          {t("register")}
         </button>
         </div>
       </div>

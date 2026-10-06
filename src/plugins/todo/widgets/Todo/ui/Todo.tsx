@@ -3,22 +3,31 @@
 import { TodoItem, TodosStore } from '@/plugins/todo/entities/todo';
 import { TodoButton, TodoInput } from '@/plugins/todo/shared/ui';
 import { observer } from 'mobx-react-lite';
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from 'react';
 import {
   ITodoItem,
   TodoPriority,
+  TodoPriorityFilter,
+  TodoStatus,
+  TodoStatusFilter,
   useDebounce,
   useTodoApi,
   useTodoFilters,
-  useTodoHandlers,
+  useTodoHandlers
 } from "../../../entities/todo";
-import { priorityLabels } from "../../../entities/todo/modules/types/types";
-import { TodoPriorityFilter, TodoStatusFilter } from "../../../entities/todo/modules/hooks/useTodoFilters";
-import { ITodoProps } from "../types/todo";
+
+import { TodoI18nProvider } from "../../../i18n/todo-i18n-provider";
+import { getTodoErrorKey } from "../modules/functions/getTodoErrorKey";
+import { ITodoProps } from "../modules/types/todo";
 import { TodoErrorToast } from "./TodoErrorToast";
 
-const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
+
+const Todos: React.FC<Omit<ITodoProps, "locale">> = ({
+  pluginDependencies,
+}) => {
   const { todoApi, reportOperationError } = pluginDependencies;
+  const t = useTranslations("common");
   const [value, setValue] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -27,15 +36,16 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleOperationError = useCallback(
-    (error: unknown, fallbackMessage: string) => {
+    (error: unknown, fallbackKey: string) => {
+      const message = t(getTodoErrorKey(error, fallbackKey));
       if (reportOperationError) {
-        reportOperationError(error, fallbackMessage);
+        reportOperationError(error, message);
         return;
       }
 
-      setLocalError(fallbackMessage);
+      setLocalError(message);
     },
-    [reportOperationError],
+    [reportOperationError, t],
   );
 
   const todoQueries = useTodoApi(todoApi, handleOperationError);
@@ -60,6 +70,11 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
     const trimmedText = text.trim();
 
     if (!trimmedText) {
+      setLocalError(t("errors.validation"));
+      return;
+    }
+    if (trimmedText.length > 500) {
+      setLocalError(t("errors.validation"));
       return;
     }
 
@@ -92,7 +107,11 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
   return (
     <div className="todo-plugin-root mx-auto w-full max-w-3xl p-3 sm:p-5">
       {localError && (
-        <TodoErrorToast message={localError} onDismiss={() => setLocalError(null)} />
+        <TodoErrorToast
+          message={localError}
+          closeLabel={t("errors.close")}
+          onDismiss={() => setLocalError(null)}
+        />
       )}
       <section className="overflow-hidden rounded-2xl border border-todo-border bg-todo-surface text-todo-ink shadow-[0_14px_44px_rgba(15,23,42,0.12)] dark:shadow-[0_18px_50px_rgba(2,6,23,0.45)]">
         <div
@@ -101,11 +120,11 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
         >
           <div className="flex items-center justify-between gap-5">
             <div className="min-w-0">
-              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-todo-muted leading-[1.4]">Tasks</p>
-              <h2 className="mt-3 text-xl font-semibold text-todo-ink leading-[1.2] sm:text-2xl">Todo</h2>
+              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-todo-muted leading-[1.4]">{t("tasks.eyebrow")}</p>
+              <h2 className="mt-3 text-xl font-semibold text-todo-ink leading-[1.2] sm:text-2xl">{t("tasks.title")}</h2>
             </div>
             <span className="inline-flex items-center rounded-full border border-todo-border bg-todo-surface px-3 py-1.5 text-[11px] font-semibold leading-none text-todo-muted ring-1 ring-inset ring-todo-border/70">
-              {visibleTodos.length} items
+              {t("tasks.count", { count: visibleTodos.length })}
             </span>
           </div>
         </div>
@@ -121,21 +140,23 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
             <div className="flex items-end gap-4 pt-1">
               <div className="min-w-0 flex-1">
                 <label htmlFor="todo-input" className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.14em] text-todo-muted leading-[1.4]">
-                  Add task
+                  {t("fields.newTask")}
                 </label>
                 <TodoInput
                   id="todo-input"
                   type="text"
                   value={value}
-                  placeholder="Add a new todo..."
-                  aria-label="New todo"
+                  placeholder={t("placeholders.newTask")}
+                  aria-label={t("fields.newTask")}
+                  required
+                  maxLength={500}
                   className="min-w-0"
                   onChange={(event) => setValue(event.target.value)}
                 />
               </div>
 
               <TodoButton type="submit" variant="primary" size="md" className="shrink-0" disabled={!value.trim()}>
-                Add task
+                {t("actions.add")}
               </TodoButton>
             </div>
           </form>
@@ -143,14 +164,14 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
           <div className="space-y-3 rounded-2xl border border-todo-border bg-todo-surface-alt p-3">
             <div className="min-w-0">
               <label htmlFor="todo-search" className="sr-only">
-                Search tasks
+                {t("fields.search")}
               </label>
               <input
                 id="todo-search"
                 type="search"
                 value={searchQuery}
-                aria-label="Search tasks by name"
-                placeholder="Search tasks..."
+                aria-label={t("fields.searchAccessible")}
+                placeholder={t("placeholders.search")}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 className="w-full rounded-xl border border-todo-border bg-todo-surface px-3 py-2 text-sm text-todo-ink placeholder:text-todo-muted focus-visible:border-todo-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-todo-ring"
               />
@@ -159,7 +180,7 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
             <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
               <div className="flex min-w-0 flex-col gap-1.5">
                 <span className="px-1 text-[10px] font-semibold uppercase tracking-wider text-todo-muted">
-                  Status
+                  {t("filters.status")}
                 </span>
                 <div
                   role="group"
@@ -168,9 +189,9 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
                 >
                   {(
                     [
-                      ["all", "All"],
-                      ["active", "Active"],
-                      ["completed", "Completed"],
+                      [TodoStatus.All, t("filters.all")],
+                      [TodoStatus.Active, t("filters.active")],
+                      [TodoStatus.Completed, t("filters.completed")],
                     ] as const
                   ).map(([filter, label]) => {
                     const isSelected = statusFilter === filter;
@@ -198,7 +219,7 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
 
               <div className="flex min-w-0 flex-col gap-1.5">
                 <span className="px-1 text-[10px] font-semibold uppercase tracking-wider text-todo-muted">
-                  Priority
+                  {t("filters.priority")}
                 </span>
                 <div
                   role="group"
@@ -207,10 +228,10 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
                 >
                   {(
                     [
-                      [null, "All"],
-                      [TodoPriority.Low, priorityLabels[TodoPriority.Low]],
-                      [TodoPriority.Medium, priorityLabels[TodoPriority.Medium]],
-                      [TodoPriority.High, priorityLabels[TodoPriority.High]],
+                      [null, t("filters.all")],
+                      [TodoPriority.Low, t("priority.low")],
+                      [TodoPriority.Medium, t("priority.medium")],
+                      [TodoPriority.High, t("priority.high")],
                     ] as const
                   ).map(([filter, label]) => {
                     const isSelected = priorityFilter === filter;
@@ -220,7 +241,9 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
                         key={filter ?? "all"}
                         type="button"
                         aria-label={
-                          filter === null ? "All priorities" : label
+                          filter === null
+                            ? t("filters.allPriorities")
+                            : label
                         }
                         aria-pressed={isSelected}
                         onClick={() => setPriorityFilter(filter)}
@@ -246,13 +269,11 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
               <div className="rounded-2xl border border-dashed border-todo-border bg-todo-surface-alt px-4 py-10 text-center">
                 {visibleTodos.length === 0 ? (
                   <>
-                    <p className="text-base font-medium text-slate-700">No tasks yet.</p>
-                    <p className="mt-1 text-sm text-slate-500">Add your first task to get started.</p>
+                    <p className="text-base font-medium text-slate-700">{t("empty.title")}</p>
+                    <p className="mt-1 text-sm text-slate-500">{t("empty.description")}</p>
                   </>
                 ) : (
-                  <p className="text-base font-medium text-slate-700">
-                    No tasks match the selected filters.
-                  </p>
+                  <p className="text-base font-medium text-slate-700">{t("empty.filtered")}</p>
                 )}
               </div>
             ) : (
@@ -274,7 +295,9 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
 
         <div className="flex items-center justify-between gap-3 border-t border-todo-border bg-todo-surface-alt px-5 py-4 sm:px-6">
           <span className="text-sm text-todo-muted">
-            {todosStore.hasChanges ? "Unsaved changes" : "All changes saved"}
+            {todosStore.hasChanges
+              ? t("changes.unsaved")
+              : t("changes.saved")}
           </span>
           <TodoButton
             type="button"
@@ -283,7 +306,7 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
             disabled={isSaveDisabled}
             className="shadow-sm"
           >
-            Save changes
+            {t("actions.save")}
           </TodoButton>
         </div>
       </section>
@@ -291,4 +314,12 @@ const Todos: React.FC<ITodoProps> = ({ pluginDependencies }) => {
   );
 };
 
-export default observer(Todos);
+const ObservedTodos = observer(Todos);
+
+const Todo: React.FC<ITodoProps> = ({ locale, ...props }) => (
+  <TodoI18nProvider locale={locale}>
+    <ObservedTodos {...props} />
+  </TodoI18nProvider>
+);
+
+export default Todo;

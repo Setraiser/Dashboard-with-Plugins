@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ITodoItem, TodoPriority, TodoStatus } from "../types/types";
 
-export type TodoStatusFilter = "all" | "active" | "completed";
+export type TodoStatusFilter = `${TodoStatus}`;
 export type TodoPriorityFilter = TodoPriority | null;
 
 interface UseTodoFiltersArgs {

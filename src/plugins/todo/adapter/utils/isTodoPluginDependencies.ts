@@ -1,4 +1,4 @@
-import { ITodoDependencies } from "../../widgets/Todo/types/todo";
+import { ITodoDependencies } from "../../widgets/Todo/modules/types/todo";
 
 export function isTodoPluginDependencies(
   value: unknown

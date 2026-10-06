@@ -1,6 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
+import { renderWithIntl } from "@/test/renderWithIntl";
 import { UserMenu } from "./UserMenu";
+
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: jest.fn() }),
+}));
 
 jest.mock("../../server/logout", () => ({
   logout: jest.fn(),
@@ -8,7 +13,7 @@ jest.mock("../../server/logout", () => ({
 
 describe("UserMenu", () => {
   it("shows the current user's name and a logout button", () => {
-    render(
+    renderWithIntl(
       <UserMenu
         user={{
           id: "user-1",
@@ -16,6 +21,7 @@ describe("UserMenu", () => {
           name: "Alex",
         }}
       />,
+      { locale: "ru" },
     );
 
     expect(screen.getByText("Alex")).toBeInTheDocument();

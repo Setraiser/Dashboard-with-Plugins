@@ -46,10 +46,14 @@ describe("auth register endpoint", () => {
     expect(mockRegisterUser).not.toHaveBeenCalled();
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({
-      error: "Request validation failed.",
-      details: expect.arrayContaining([
-        expect.objectContaining({ path: "name" }),
-      ]),
+      error: {
+        code: "VALIDATION_ERROR",
+        details: {
+          issues: expect.arrayContaining([
+            expect.objectContaining({ path: "name" }),
+          ]),
+        },
+      },
     });
   });
 
@@ -62,7 +66,7 @@ describe("auth register endpoint", () => {
 
     expect(response.status).toBe(400);
     expect(await response.json()).toEqual({
-      error: "Request body must contain valid JSON.",
+      error: { code: "INVALID_JSON" },
     });
   });
 
@@ -79,7 +83,7 @@ describe("auth register endpoint", () => {
 
     expect(response.status).toBe(409);
     expect(await response.json()).toEqual({
-      error: "An account with this email already exists.",
+      error: { code: "EMAIL_ALREADY_EXISTS" },
     });
   });
 
@@ -96,7 +100,7 @@ describe("auth register endpoint", () => {
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({
-      error: "An unexpected server error occurred.",
+      error: { code: "INTERNAL_ERROR" },
     });
   });
 });

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "tasks": {
+      "eyebrow": "Tasks",
+      "title": "Todo",
+      "count": "{count, plural, one {# item} other {# items}}"
+    },
+    "actions": {
+      "add": "Add task",
+      "save": "Save changes",
+      "delete": "Delete"
+    },
+    "fields": {
+      "newTask": "Add task",
+      "search": "Search tasks",
+      "searchAccessible": "Search tasks by name",
+      "taskName": "Task name for {task}",
+      "markComplete": "Mark {task} as complete",
+      "markIncomplete": "Mark {task} as incomplete",
+      "priority": "Task priority"
+    },
+    "placeholders": {
+      "newTask": "Add a new todo...",
+      "search": "Search tasks..."
+    },
+    "filters": {
+      "status": "Status",
+      "priority": "Priority",
+      "all": "All",
+      "active": "Active",
+      "completed": "Completed",
+      "allPriorities": "All priorities"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "empty": {
+      "title": "No tasks yet.",
+      "description": "Add your first task to get started.",
+      "filtered": "No tasks match the selected filters."
+    },
+    "changes": {
+      "unsaved": "Unsaved changes",
+      "saved": "All changes saved"
+    },
+    "errors": {
+      "load": "Could not load tasks. Please try again.",
+      "create": "Could not add the task. Please try again.",
+      "delete": "Could not delete the task. Please try again.",
+      "save": "Could not save changes. Please try again.",
+      "notFound": "This task no longer exists.",
+      "validation": "Check the task details and try again.",
+      "generic": "Something went wrong. Please try again.",
+      "close": "Dismiss notification"
+    }
+  }
+}

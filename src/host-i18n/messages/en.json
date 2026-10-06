@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "title": "Plugin Dashboard",
+    "description": "A welcoming home for focused tools."
+  },
+  "dashboard": {
+    "eyebrow": "Your creative workspace",
+    "title": "Plugin Dashboard",
+    "description": "Explore and open the tools available in your workspace."
+  },
+  "pluginCatalog": {
+    "eyebrow": "Get started",
+    "title": "Your plugins",
+    "description": "Choose a tool to continue"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "breadcrumbLabel": "Breadcrumb",
+    "pluginNavigationLabel": "Plugin navigation"
+  },
+  "common": {
+    "logout": "Sign out",
+    "languageSwitcher": "Language",
+    "switchToEnglish": "Switch language to English",
+    "switchToRussian": "Switch language to Russian",
+    "closeNotification": "Dismiss notification",
+    "retry": "Try again"
+  },
+  "auth": {
+    "login": "Sign in",
+    "register": "Create account",
+    "loginEyebrow": "Workspace access",
+    "registerEyebrow": "Create your workspace",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Repeat your password",
+    "loginSubmit": "Sign in",
+    "loginSubmitting": "Signing in...",
+    "registerSubmit": "Create account",
+    "registerSubmitting": "Creating account...",
+    "errors": {
+      "invalidCredentials": "The email or password is incorrect.",
+      "emailAlreadyExists": "An account with this email already exists.",
+      "loginFailed": "Could not sign in. Please try again.",
+      "registerFailed": "Could not create your account. Please try again."
+    },
+    "validation": {
+      "nameRequired": "Enter your name.",
+      "nameTooShort": "Name must be at least 2 characters.",
+      "emailRequired": "Enter your email.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "passwordTooShort": "Password must be at least 6 characters.",
+      "confirmPasswordRequired": "Confirm your password.",
+      "passwordMismatch": "Passwords do not match."
+    }
+  },
+  "runtime": {
+    "loadingPlugins": "Loading plugins...",
+    "loadingPlugin": "Loading plugin...",
+    "navigationFailed": "Could not load plugin navigation.",
+    "pluginNotFound": "Plugin route was not found.",
+    "pluginFailed": "This plugin could not be displayed.",
+    "applicationError": "Something went wrong.",
+    "retry": "Try again"
+  },
+  "errors": {
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "forbidden": "You do not have permission to perform this action.",
+    "validation": "Some information is invalid. Please check and try again.",
+    "notFound": "The requested item could not be found.",
+    "conflict": "This action conflicts with the current state.",
+    "unexpected": "Something went wrong. Please try again."
+  }
+}
