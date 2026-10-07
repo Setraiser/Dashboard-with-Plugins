@@ -24,7 +24,7 @@ export function TodoCreateForm({
       }}
       className="space-y-5"
     >
-      <div className="flex items-end gap-4 pt-1">
+      <div className="flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-end sm:gap-4">
         <div className="min-w-0 flex-1">
           <label
             htmlFor="todo-input"
@@ -49,7 +49,7 @@ export function TodoCreateForm({
           type="submit"
           variant="primary"
           size="md"
-          className="shrink-0"
+          className="w-full sm:w-auto"
           disabled={!value.trim()}
         >
           {t("actions.add")}

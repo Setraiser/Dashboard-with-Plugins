@@ -45,7 +45,7 @@ const TodoItem: React.FC<ITodoItemProps> = observer((props) => {
         />
       </div>
 
-      <div className="flex items-center gap-2 pt-0.5 sm:justify-end sm:pt-0">
+      <div className="flex flex-wrap items-center gap-2 pt-0.5 sm:justify-end sm:pt-0">
         <label className="flex items-center gap-2.5 rounded-xl border border-todo-border bg-todo-surface-alt px-2.5 py-2 text-xs text-todo-muted shadow-sm">
           <span className="sr-only">{t("filters.priority")}</span>
           <TodoPriorityBadge
