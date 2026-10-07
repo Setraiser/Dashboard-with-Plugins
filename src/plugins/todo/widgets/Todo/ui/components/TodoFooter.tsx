@@ -17,7 +17,7 @@ export function TodoFooter({
   const t = useTranslations("common");
 
   return (
-    <div className="flex items-center justify-between gap-3 border-t border-todo-border bg-todo-surface-alt px-5 py-4 sm:px-6">
+    <div className="flex flex-col items-stretch gap-3 border-t border-todo-border bg-todo-surface-alt px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
       <span className="text-sm text-todo-muted">
         {hasChanges ? t("changes.unsaved") : t("changes.saved")}
       </span>
@@ -26,7 +26,7 @@ export function TodoFooter({
         variant="primary"
         onClick={onSave}
         disabled={saveDisabled}
-        className="shadow-sm"
+        className="w-full shadow-sm sm:w-auto"
       >
         {t("actions.save")}
       </TodoButton>

@@ -118,7 +118,7 @@ const Todos: React.FC<Omit<ITodoProps, "locale">> = ({
       <section className="overflow-hidden rounded-2xl border border-todo-border bg-todo-surface text-todo-ink shadow-[0_14px_44px_rgba(15,23,42,0.12)] dark:shadow-[0_18px_50px_rgba(2,6,23,0.45)]">
         <TodoHeader taskCount={visibleTodos.length} />
 
-        <div className="space-y-6 p-5 sm:px-6 sm:py-6">
+        <div className="space-y-6 p-4 sm:p-6">
           <TodoCreateForm
             value={value}
             onValueChange={setValue}

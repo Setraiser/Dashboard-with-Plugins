@@ -66,7 +66,7 @@ export function TodoFilters({
           <div
             role="group"
             aria-label={t("filters.statusGroup")}
-            className="inline-flex w-fit max-w-full rounded-xl border border-todo-border bg-todo-surface p-1"
+            className="inline-flex w-fit max-w-full flex-wrap rounded-xl border border-todo-border bg-todo-surface p-1"
           >
             {[
               [TodoStatus.All, t("filters.all")],
@@ -93,7 +93,7 @@ export function TodoFilters({
           <div
             role="group"
             aria-label={t("filters.priorityGroup")}
-            className="inline-flex w-fit max-w-full rounded-xl border border-todo-border bg-todo-surface p-1"
+            className="inline-flex w-fit max-w-full flex-wrap rounded-xl border border-todo-border bg-todo-surface p-1"
           >
             {priorityFilters.map(([selectedFilter, label]) => {
               const isSelected = priorityFilter === selectedFilter;
