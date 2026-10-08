@@ -1,6 +1,3 @@
-
-"use client";
-
 import { observer } from 'mobx-react-lite';
 import { useTranslations } from "next-intl";
 import React from 'react';

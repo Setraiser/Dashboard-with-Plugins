@@ -1,5 +1,3 @@
-"use client";
-
 import { combineClassNames } from "@/shared/lib/utils/combineClassNames/combine-class-names";
 import Link from "next/link";
 import { useTranslations } from "next-intl";

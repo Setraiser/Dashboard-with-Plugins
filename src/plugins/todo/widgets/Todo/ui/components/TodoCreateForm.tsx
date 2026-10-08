@@ -1,5 +1,3 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import { TodoButton, TodoInput } from "@/plugins/todo/shared/ui";
 

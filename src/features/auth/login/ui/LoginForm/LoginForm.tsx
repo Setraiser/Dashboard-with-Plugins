@@ -1,5 +1,3 @@
-"use client"
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ApiClientError } from "@/shared/lib/server/apiClient/api-client-error";
 import { useRouter } from "next/navigation";

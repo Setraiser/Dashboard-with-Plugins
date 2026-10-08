@@ -1,5 +1,3 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import { TodoItem } from "@/plugins/todo/entities/todo";
 import type { ITodoItem } from "@/plugins/todo/entities/todo/modules/types/types";
