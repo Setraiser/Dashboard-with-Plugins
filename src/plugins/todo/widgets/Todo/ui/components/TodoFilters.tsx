@@ -1,5 +1,3 @@
-"use client";
-
 import { useTranslations } from "next-intl";
 import { TodoPriority, TodoStatus } from "@/plugins/todo/entities/todo/modules/types/types";
 import type {

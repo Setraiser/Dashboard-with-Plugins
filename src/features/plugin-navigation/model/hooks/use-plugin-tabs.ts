@@ -1,5 +1,3 @@
-"use client";
-
 import { initDefaultRegistry } from "@/plugin-runtime/model/registry/default-registry";
 import {
   getRegisteredPluginIds,

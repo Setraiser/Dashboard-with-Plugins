@@ -1,5 +1,3 @@
-"use client";
-
 import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
 import enMessages from "./messages/en.json";

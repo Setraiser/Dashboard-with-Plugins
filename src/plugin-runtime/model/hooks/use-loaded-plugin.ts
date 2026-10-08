@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
 import { loadPlugin } from "../registry/registry";
 import type { PluginModule } from "../types/plugin-runtime-types";
