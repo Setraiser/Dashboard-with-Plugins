@@ -10,6 +10,10 @@ export function initDefaultRegistry(): void {
       id: "todo",
       loader: () => import("@/plugins/todo"),
     },
+    {
+      id: "falling-clicker",
+      loader: () => import("@/plugins/falling-clicker"),
+    },
   ]);
 
   initialized = true;

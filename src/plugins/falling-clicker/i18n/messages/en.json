@@ -1,0 +1,17 @@
+{
+  "game": {
+    "start": "Start",
+    "score": "Score",
+    "health": "Health",
+    "time": "Time",
+    "bestScore": "Best Score",
+    "gameOver": "Game Over",
+    "playAgain": "Play Again",
+    "instructions": "Click the falling stars. Avoid the red shapes.",
+    "target": "Target: stars",
+    "playArea": "Falling Clicker game area",
+    "saveFailed": "Could not save your score. Please try again later.",
+    "scoreNotSaved": "Your score was not saved because you are signed out.",
+    "canvasError": "The game could not be started. Please reload the page."
+  }
+}
