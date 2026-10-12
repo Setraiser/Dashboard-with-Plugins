@@ -11,4 +11,5 @@ export interface PluginHostApi {
 export enum PluginId {
   Todo = "todo",
   Clock = "clock",
+  FallingClicker = "falling-clicker",
 }
