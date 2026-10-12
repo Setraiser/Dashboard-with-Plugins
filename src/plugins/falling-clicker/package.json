@@ -1,0 +1,19 @@
+{
+  "name": "@plugins/falling-clicker",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "dependencies": {
+    "pixi.js": "^8.22.0",
+    "next-intl": "^4.14.9"
+  },
+  "devDependencies": {
+    "@types/react": "19",
+    "typescript": "^5.9.3"
+  }
+}
