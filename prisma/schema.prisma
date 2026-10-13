@@ -31,6 +31,7 @@ model User {
   passwordHash String
   sessions     Session[]
   todos        Todo[]
+  gameBestScores GameBestScore[]
 }
 
 model Session {
@@ -60,4 +61,17 @@ model Todo {
   priority  TodoPriority @default(Low)
   userId    String
   user      User         @relation(fields: [userId], references: [id])
+}
+
+model GameBestScore {
+  userId    String
+  gameId    String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, gameId])
+  @@index([gameId])
 }
