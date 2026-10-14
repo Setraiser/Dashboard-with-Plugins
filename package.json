@@ -7,10 +7,10 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:prod": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "test": "jest",
+    "lint:ts": "eslint",
+    "test:unit": "jest",
     "prisma": "npx prisma studio",
     "postinstall": "prisma generate"
   },
