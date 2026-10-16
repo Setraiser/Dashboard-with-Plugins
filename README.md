@@ -1,6 +1,8 @@
 # Dashboard with Plugins
 
-Dashboard with Plugins is a Next.js-based demo application for a modular dashboard where the host app loads isolated plugins and renders them in a shared shell. The project focuses on plugin boundaries, host-plugin integration, authentication, and a clean runtime model that keeps portable plugin code separate from host-specific infrastructure.
+Dashboard with Plugins is a learning-oriented portfolio project built with Next.js, React, and TypeScript. It demonstrates a plugin-based architecture with independently organized mini-applications.
+
+[Live Demo](https://dashboard-with-plugins.vercel.app) · [Source Code](https://github.com/Setraiser/Dashboard-with-Plugins)
 
 ## Project overview
 
