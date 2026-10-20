@@ -18,27 +18,27 @@ export function Breadcrumbs() {
 
   return (
     <nav aria-label={t("breadcrumbLabel")}>
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-slate-600 sm:text-[15px] dark:text-slate-300">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-[#686960] sm:text-[15px] dark:text-[#b4b4aa]">
         {items.map((item, index) => {
           const isCurrent = index === items.length - 1;
 
           return (
             <li className="flex items-center gap-1.5" key={`${item.label}-${index}`}>
               {index > 0 && (
-                <span className="text-slate-400 dark:text-slate-500" aria-hidden="true">
+                <span className="text-[#aaa79d] dark:text-[#6c6e64]" aria-hidden="true">
                   /
                 </span>
               )}
               {item.href && !isCurrent ? (
                 <Link
                   href={item.href}
-                  className="inline-flex items-center rounded-md px-1.5 py-1 font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                  className="inline-flex items-center px-1.5 py-1 font-medium text-[#686960] transition-colors hover:text-[#8d4935] dark:text-[#b4b4aa] dark:hover:text-[#e4aa91]"
                 >
                   {item.label}
                 </Link>
               ) : (
                 <span
-                  className="inline-flex items-center rounded-md px-1.5 py-1 font-semibold text-slate-900 dark:text-white"
+                  className="inline-flex items-center px-1.5 py-1 font-semibold text-[#282923] dark:text-[#f0eee7]"
                   aria-current={isCurrent ? "page" : undefined}
                 >
                   {item.label}
