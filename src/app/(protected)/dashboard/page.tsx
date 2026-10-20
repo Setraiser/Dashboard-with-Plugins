@@ -8,16 +8,14 @@ export default async function DashboardPage() {
 
   return (
     <main className="w-full">
-      <header className="relative isolate mb-10 overflow-hidden rounded-[2rem] border border-white/80 bg-white/75 px-5 py-10 text-center shadow-xl shadow-indigo-950/5 backdrop-blur sm:mb-12 sm:px-10 sm:py-14 dark:border-slate-700/70 dark:bg-slate-900/70">
-        <div aria-hidden="true" className="absolute -right-20 -top-28 -z-10 h-72 w-72 rounded-full bg-indigo-300/25 blur-3xl dark:bg-indigo-500/15" />
-        <div aria-hidden="true" className="absolute -bottom-32 -left-16 -z-10 h-64 w-64 rounded-full bg-teal-200/35 blur-3xl dark:bg-teal-500/10" />
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-indigo-600 dark:text-indigo-300">
+      <header className="mb-12 max-w-3xl border-l-2 border-[#a34d36] py-1 pl-5 sm:mb-16 sm:pl-7">
+        <p className="mb-4 text-xs font-semibold tracking-[0.12em] text-[#8d4935] dark:text-[#d18468]">
           {t("eyebrow")}
         </p>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-5xl dark:text-white">
+        <h1 className="font-serif text-4xl font-medium leading-tight tracking-[-0.035em] text-[#282923] sm:text-6xl dark:text-[#f0eee7]">
           {t("title")}
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">
+        <p className="mt-5 max-w-xl text-base leading-7 text-[#686960] sm:text-lg dark:text-[#b4b4aa]">
           {t("description")}
         </p>
       </header>

@@ -18,18 +18,18 @@ export function PluginTabs({ items, activePluginId }: PluginTabsProps) {
                 href={`/dashboard/${item.id}`}
                 aria-current={isActive ? "page" : undefined}
                 className={combineClassNames(
-                  "group relative flex min-h-28 flex-col justify-center gap-2 overflow-hidden rounded-2xl border border-(--dashboard-host-tab-border) bg-(--dashboard-host-tab-bg) p-5 text-(--dashboard-host-tab-text) no-underline shadow-sm shadow-slate-900/5 transition duration-200 hover:-translate-y-1 hover:border-(--dashboard-host-tab-active-border) hover:shadow-xl hover:shadow-indigo-950/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--dashboard-host-tab-active-border) motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+                  "group flex min-h-36 flex-col justify-between gap-8 rounded-md border border-(--dashboard-host-tab-border) border-t-2 border-t-transparent bg-(--dashboard-host-tab-bg) p-5 text-(--dashboard-host-tab-text) no-underline transition-colors duration-150 hover:border-(--dashboard-host-tab-active-border) hover:border-t-(--dashboard-host-tab-active-border) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--dashboard-host-tab-active-border) motion-reduce:transition-none",
                   {
-                    "border-(--dashboard-host-tab-active-border) bg-(--dashboard-host-tab-active-bg) text-(--dashboard-host-tab-active-text)":
+                    "border-(--dashboard-host-tab-active-border) border-t-(--dashboard-host-tab-active-border) bg-(--dashboard-host-tab-active-bg) text-(--dashboard-host-tab-active-text)":
                       isActive,
                   },
                 )}
               >
-                <span className="flex items-center justify-between text-base font-semibold tracking-tight">
+                <span className="flex items-start justify-between gap-4 text-lg font-semibold tracking-tight">
                   {item.displayName}
-                  <span aria-hidden="true" className="text-lg text-indigo-500 transition-transform group-hover:translate-x-1">↗</span>
+                  <span aria-hidden="true" className="text-base text-[#8d4935] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-[#d18468]">↗</span>
                 </span>
-                <span className="text-sm leading-6 text-(--dashboard-host-tab-text) opacity-75">
+                <span className="max-w-[28ch] text-sm leading-6 text-(--dashboard-host-tab-text) opacity-75">
                   {item.description}
                 </span>
               </Link>

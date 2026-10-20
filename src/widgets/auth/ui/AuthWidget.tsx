@@ -1,34 +1,33 @@
-"use client"
-// AuthWidget.tsx
+"use client";
 import { LoginForm, RegisterForm } from "@/features/auth";
 import { useTranslations } from "next-intl";
-import { useState } from 'react';
+import { useState } from "react";
 import { AuthMode } from "../model/types/auth";
 
 export function AuthWidget() {
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [mode, setMode] = useState<AuthMode>("login");
   const t = useTranslations("auth");
 
   return (
-    <div className="mx-auto w-full max-w-md overflow-hidden rounded-3xl border border-white/80 bg-white/80 shadow-2xl shadow-indigo-950/10 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/75">
-      <div className="border-b border-slate-200/80 p-2 dark:border-slate-700/80">
-        <div className="flex rounded-2xl bg-slate-100/80 p-1 dark:bg-slate-800/80">
+    <div className="mx-auto w-full max-w-md overflow-hidden rounded-md border border-[#d9d5ca] bg-[#fbfaf6] dark:border-[#45473f] dark:bg-[#20231e]">
+      <div className="border-b border-[#d9d5ca] dark:border-[#45473f]">
+        <div className="flex">
         <button
           type="button"
-          onClick={() => setMode('login')}
-          className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${mode === 'login'
-            ? 'bg-white text-indigo-700 shadow-sm dark:bg-slate-700 dark:text-indigo-200'
-            : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
+          onClick={() => setMode("login")}
+          className={`flex-1 border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${mode === "login"
+            ? "border-[#a34d36] text-[#8d4935] dark:border-[#d18468] dark:text-[#e4aa91]"
+            : "border-transparent text-[#77786f] hover:text-[#282923] dark:text-[#a4a59b] dark:hover:text-[#f0eee7]"
             }`}
         >
           {t("login")}
         </button>
         <button
           type="button"
-          onClick={() => setMode('register')}
-          className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${mode === 'register'
-            ? 'bg-white text-indigo-700 shadow-sm dark:bg-slate-700 dark:text-indigo-200'
-            : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
+          onClick={() => setMode("register")}
+          className={`flex-1 border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${mode === "register"
+            ? "border-[#a34d36] text-[#8d4935] dark:border-[#d18468] dark:text-[#e4aa91]"
+            : "border-transparent text-[#77786f] hover:text-[#282923] dark:text-[#a4a59b] dark:hover:text-[#f0eee7]"
             }`}
         >
           {t("register")}
@@ -38,7 +37,7 @@ export function AuthWidget() {
 
       <div className="overflow-hidden">
         <div className="transition-all duration-300 ease-in-out">
-          {mode === 'login' ? <LoginForm /> : <RegisterForm />}
+          {mode === "login" ? <LoginForm /> : <RegisterForm />}
         </div>
       </div>
     </div>

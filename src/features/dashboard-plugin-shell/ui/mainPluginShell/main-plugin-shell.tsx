@@ -14,26 +14,24 @@ export function MainPluginShell() {
   if (isLoading) return <LoadingState label={t("runtime.loadingPlugins")} />;
 
   return (
-    <section className="mr-auto w-full max-w-6xl text-left" aria-labelledby="plugins-heading">
-      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <section className="mr-auto w-full text-left" aria-labelledby="plugins-heading">
+      <div className="mb-6 flex flex-col gap-3 border-b border-[#d9d5ca] pb-4 sm:flex-row sm:items-end sm:justify-between dark:border-[#45473f]">
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-300">
+          <p className="mb-2 text-xs font-semibold tracking-[0.1em] text-[#8d4935] dark:text-[#d18468]">
             {t("pluginCatalog.eyebrow")}
           </p>
           <h2
             id="plugins-heading"
-            className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white"
+            className="font-serif text-3xl font-medium tracking-[-0.025em] text-[#282923] sm:text-4xl dark:text-[#f0eee7]"
           >
             {t("pluginCatalog.title")}
           </h2>
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-[#686960] dark:text-[#b4b4aa]">
           {t("pluginCatalog.description")}
         </p>
       </div>
-      <div className="rounded-[1.75rem] border border-white/80 bg-white/60 p-3 shadow-lg shadow-slate-900/5 backdrop-blur sm:p-5 dark:border-slate-700/70 dark:bg-slate-900/45">
-        <PluginTabs items={tabs} activePluginId={null} />
-      </div>
+      <PluginTabs items={tabs} activePluginId={null} />
     </section>
   );
 }

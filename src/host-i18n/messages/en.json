@@ -4,14 +4,14 @@
     "description": "A welcoming home for focused tools."
   },
   "dashboard": {
-    "eyebrow": "Your creative workspace",
+    "eyebrow": "Workspace",
     "title": "Plugin Dashboard",
-    "description": "Explore and open the tools available in your workspace."
+    "description": "Open a tool to get on with your work."
   },
   "pluginCatalog": {
-    "eyebrow": "Get started",
-    "title": "Your plugins",
-    "description": "Choose a tool to continue"
+    "eyebrow": "Catalog",
+    "title": "Available plugins",
+    "description": "Choose a tool to open it."
   },
   "navigation": {
     "dashboard": "Dashboard",
