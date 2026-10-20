@@ -37,12 +37,12 @@ export function LoginForm() {
 
   return (
     <div className="w-full p-6 sm:p-8">
-      <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">{t("loginEyebrow")}</p>
-      <h2 className="mb-7 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{t("login")}</h2>
+      <p className="mb-2 text-center text-xs font-semibold tracking-[0.1em] text-[#8d4935] dark:text-[#d18468]">{t("loginEyebrow")}</p>
+      <h2 className="mb-7 text-center font-serif text-3xl font-medium tracking-tight text-[#282923] dark:text-[#f0eee7]">{t("login")}</h2>
 
       <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-[#494a43] dark:text-[#d5d4cb]">
             {t("email")}
           </label>
           <input
@@ -52,9 +52,9 @@ export function LoginForm() {
             {...register('email')}
             aria-invalid={Boolean(errors.email)}
             aria-describedby={errors.email ? "email-error" : undefined}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${errors.email
+            className={`w-full rounded-sm border bg-white px-3 py-2 text-[#282923] focus:outline-none focus:ring-2 focus:border-transparent dark:bg-[#171916] dark:text-[#f0eee7] ${errors.email
               ? "border-red-500 focus:ring-red-500"
-              : "border-slate-300 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+              : "border-[#c9c5ba] focus:ring-[#a34d36] dark:border-[#55574e] dark:focus:ring-[#d18468]"
               }`}
             placeholder={t("emailPlaceholder")}
           />
@@ -68,7 +68,7 @@ export function LoginForm() {
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
+          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-[#494a43] dark:text-[#d5d4cb]">
             {t("password")}
           </label>
           <input
@@ -78,9 +78,9 @@ export function LoginForm() {
             {...register('password')}
             aria-invalid={Boolean(errors.password)}
             aria-describedby={errors.password ? "password-error" : undefined}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${errors.password
+            className={`w-full rounded-sm border bg-white px-3 py-2 text-[#282923] focus:outline-none focus:ring-2 focus:border-transparent dark:bg-[#171916] dark:text-[#f0eee7] ${errors.password
               ? "border-red-500 focus:ring-red-500"
-              : "border-slate-300 focus:ring-indigo-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+              : "border-[#c9c5ba] focus:ring-[#a34d36] dark:border-[#55574e] dark:focus:ring-[#d18468]"
               }`}
             placeholder={t("passwordPlaceholder")}
           />
@@ -102,7 +102,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white shadow-lg shadow-indigo-950/10 transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-300 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-indigo-900"
+          className="w-full rounded-sm bg-[#a34d36] px-4 py-3 font-semibold text-white transition-colors hover:bg-[#873e2c] disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#a8583e] dark:hover:bg-[#bb684c]"
         >
           {isSubmitting ? t("loginSubmitting") : t("loginSubmit")}
         </button>

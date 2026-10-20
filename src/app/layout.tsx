@@ -36,7 +36,7 @@ export default async function RootLayout({
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <div
-            className="flex min-h-full flex-1 flex-col text-slate-800 [--dashboard-host-tab-border:#d9e1ee] [--dashboard-host-tab-bg:#ffffffcc] [--dashboard-host-tab-text:#334155] [--dashboard-host-tab-active-border:#6366f1] [--dashboard-host-tab-active-bg:#eef2ff] [--dashboard-host-tab-active-text:#4338ca] [font-family:var(--font-geist-sans),Arial,Helvetica,sans-serif] antialiased [&_a]:text-inherit [&_a]:no-underline dark:text-slate-100 dark:[--dashboard-host-tab-border:#334155] dark:[--dashboard-host-tab-bg:#0f172acc] dark:[--dashboard-host-tab-text:#e2e8f0] dark:[--dashboard-host-tab-active-border:#818cf8] dark:[--dashboard-host-tab-active-bg:#312e8133] dark:[--dashboard-host-tab-active-text:#c7d2fe]"
+            className="flex min-h-full flex-1 flex-col text-[#282923] [--dashboard-host-tab-border:#d9d5ca] [--dashboard-host-tab-bg:#fbfaf6] [--dashboard-host-tab-text:#36372f] [--dashboard-host-tab-active-border:#a34d36] [--dashboard-host-tab-active-bg:#f3e8e1] [--dashboard-host-tab-active-text:#783d2e] [font-family:var(--font-geist-sans),Arial,Helvetica,sans-serif] antialiased [&_a]:text-inherit [&_a]:no-underline dark:text-[#e9e7df] dark:[--dashboard-host-tab-border:#45473f] dark:[--dashboard-host-tab-bg:#20231e] dark:[--dashboard-host-tab-text:#e9e7df] dark:[--dashboard-host-tab-active-border:#d18468] dark:[--dashboard-host-tab-active-bg:#382a24] dark:[--dashboard-host-tab-active-text:#f0c0aa]"
           >
             <ErrorNotificationProvider>
               <AppQueryProvider>

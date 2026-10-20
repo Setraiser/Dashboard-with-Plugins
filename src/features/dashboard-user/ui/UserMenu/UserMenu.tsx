@@ -13,13 +13,13 @@ export function UserMenu({ user }: UserMenuProps) {
   return (
     <div className="flex items-center justify-between gap-4 sm:justify-end">
       <LanguageSwitcher />
-      <span className="truncate text-sm font-medium text-slate-700 dark:text-slate-200">
+      <span className="truncate text-sm font-medium text-[#494a43] dark:text-[#d5d4cb]">
         {user.name}
       </span>
       <form action={logout}>
         <button
           type="submit"
-          className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+          className="rounded-sm border border-[#c9c5ba] px-3 py-1.5 text-sm font-medium text-[#494a43] transition-colors hover:border-[#a34d36] hover:text-[#8d4935] dark:border-[#55574e] dark:text-[#d5d4cb] dark:hover:border-[#d18468] dark:hover:text-[#e4aa91]"
         >
           {t("logout")}
         </button>

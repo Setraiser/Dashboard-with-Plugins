@@ -29,7 +29,7 @@ export function LanguageSwitcher() {
   return (
     <nav
       aria-label={t("languageSwitcher")}
-      className="inline-flex shrink-0 items-center rounded-lg border border-slate-200 bg-white/70 p-0.5 dark:border-slate-700 dark:bg-slate-800/70"
+      className="inline-flex shrink-0 items-center border border-[#c9c5ba] p-0.5 dark:border-[#55574e]"
     >
       {locales.map((option) => (
         <button
@@ -40,10 +40,10 @@ export function LanguageSwitcher() {
           aria-pressed={locale === option}
           disabled={isPending}
           onClick={() => changeLocale(option)}
-          className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+          className={`px-2.5 py-1 text-xs font-semibold transition-colors ${
             locale === option
-              ? "bg-indigo-600 text-white shadow-sm"
-              : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+              ? "bg-[#a34d36] text-white"
+              : "text-[#686960] hover:bg-[#ebe8df] dark:text-[#b4b4aa] dark:hover:bg-[#292c27]"
           }`}
         >
           {localeLabels[option]}
