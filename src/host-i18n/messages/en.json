@@ -1,17 +1,17 @@
 {
   "metadata": {
     "title": "Plugin Dashboard",
-    "description": "A welcoming home for focused tools."
+    "description": "A welcoming home for apps."
   },
   "dashboard": {
     "eyebrow": "Workspace",
     "title": "Plugin Dashboard",
-    "description": "Open a tool to get on with your work."
+    "description": "Open an app what you want."
   },
   "pluginCatalog": {
     "eyebrow": "Catalog",
     "title": "Available plugins",
-    "description": "Choose a tool to open it."
+    "description": "Choose an app to open it."
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -29,8 +29,8 @@
   "auth": {
     "login": "Sign in",
     "register": "Create account",
-    "loginEyebrow": "Workspace access",
-    "registerEyebrow": "Create your workspace",
+    "loginEyebrow": "App access",
+    "registerEyebrow": "Create your account",
     "name": "Name",
     "email": "Email",
     "password": "Password",
