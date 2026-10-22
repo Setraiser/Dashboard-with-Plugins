@@ -17,12 +17,12 @@ export function MainPluginShell() {
     <section className="mr-auto w-full text-left" aria-labelledby="plugins-heading">
       <div className="mb-6 flex flex-col gap-3 border-b border-[#d9d5ca] pb-4 sm:flex-row sm:items-end sm:justify-between dark:border-[#45473f]">
         <div>
-          <p className="mb-2 text-xs font-semibold tracking-[0.1em] text-[#8d4935] dark:text-[#d18468]">
+          <p className="mb-2 text-xs font-semibold tracking-widest text-[#8d4935] dark:text-[#d18468]">
             {t("pluginCatalog.eyebrow")}
           </p>
           <h2
             id="plugins-heading"
-            className="font-serif text-3xl font-medium tracking-[-0.025em] text-[#282923] sm:text-4xl dark:text-[#f0eee7]"
+            className="font-serif text-3xl font-medium tracking-tight text-[#282923] sm:text-4xl dark:text-[#f0eee7]"
           >
             {t("pluginCatalog.title")}
           </h2>
