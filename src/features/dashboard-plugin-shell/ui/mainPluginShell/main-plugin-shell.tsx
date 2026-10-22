@@ -22,7 +22,7 @@ export function MainPluginShell() {
           </p>
           <h2
             id="plugins-heading"
-            className="font-serif text-3xl font-medium tracking-[-0.025em] text-[#282923] sm:text-4xl dark:text-[#f0eee7]"
+            className="font-serif text-3xl font-medium tracking-tight text-[#282923] sm:text-4xl dark:text-[#f0eee7]"
           >
             {t("pluginCatalog.title")}
           </h2>
