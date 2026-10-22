@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Plugin Dashboard",
-    "description": "A welcoming home for focused tools."
+    "description": "A welcoming home for apps."
   },
   "dashboard": {
     "eyebrow": "Workspace",
@@ -29,8 +29,8 @@
   "auth": {
     "login": "Sign in",
     "register": "Create account",
-    "loginEyebrow": "Workspace access",
-    "registerEyebrow": "Create your workspace",
+    "loginEyebrow": "App access",
+    "registerEyebrow": "Create your account",
     "name": "Name",
     "email": "Email",
     "password": "Password",
