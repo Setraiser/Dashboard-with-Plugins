@@ -13,7 +13,7 @@ export async function validateCredentials(email: string, password: string) {
     return null;
   }
 
-  const isValid = await verifyPassword(password, user.passwordHash);
+  const isValid = await verifyPassword(user.passwordHash, password);
 
   if (!isValid) {
     return null;
