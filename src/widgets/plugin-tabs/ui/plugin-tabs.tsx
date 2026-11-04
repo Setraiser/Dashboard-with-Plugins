@@ -18,7 +18,7 @@ export function PluginTabs({ items, activePluginId }: PluginTabsProps) {
                 href={`/dashboard/${item.id}`}
                 aria-current={isActive ? "page" : undefined}
                 className={combineClassNames(
-                  "group flex min-h-36 flex-col justify-between gap-8 rounded-md border border-(--dashboard-host-tab-border) border-t-2 border-t-transparent bg-(--dashboard-host-tab-bg) p-5 text-(--dashboard-host-tab-text) no-underline transition-colors duration-150 hover:border-(--dashboard-host-tab-active-border) hover:border-t-(--dashboard-host-tab-active-border) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--dashboard-host-tab-active-border) motion-reduce:transition-none",
+                  "group flex h-full min-h-36 flex-col justify-between gap-8 rounded-md border border-(--dashboard-host-tab-border) border-t-2 border-t-transparent bg-(--dashboard-host-tab-bg) p-5 text-(--dashboard-host-tab-text) no-underline transition-colors duration-150 hover:border-(--dashboard-host-tab-active-border) hover:border-t-(--dashboard-host-tab-active-border) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--dashboard-host-tab-active-border) motion-reduce:transition-none",
                   {
                     "border-(--dashboard-host-tab-active-border) border-t-(--dashboard-host-tab-active-border) bg-(--dashboard-host-tab-active-bg) text-(--dashboard-host-tab-active-text)":
                       isActive,
